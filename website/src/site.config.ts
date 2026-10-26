@@ -1,0 +1,13 @@
+// Everything a visitor can change or that is personal lives here.
+export const site = {
+  name: 'Amir Mahdi Sarikhanifard',
+  role: 'Software engineer',
+  location: 'Australia',
+  github: 'https://github.com/amir2965/White-labeled-self-service-kiosk-for-Ipad',
+  githubProfile: 'https://github.com/amir2965',
+  // Verify this slug matches your profile URL before publishing.
+  linkedinProfile: 'https://www.linkedin.com/in/amirmahdi-sarikhanifard',
+  linkedinPost: 'https://lnkd.in/p/gej2HySb',
+  // Optional: set an address to show a contact link in the footer.
+  email: '',
+};

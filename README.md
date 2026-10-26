@@ -5,6 +5,8 @@ A tablet-style, self-service ordering kiosk with a merchant back office, built w
 > **Portfolio project.** All payments are **simulated** — no real payment provider, card data, or database is used.
 >
 > Project story: [read the LinkedIn post](https://lnkd.in/p/gej2HySb).
+>
+> Interactive 3D showcase with a try-it-yourself demo: [`website/`](website) (deploys free to GitHub Pages).
 
 ## Screenshots
 
