@@ -27,7 +27,6 @@ function Rig({ mobile, liveActive, liveChildren }: RigProps) {
     (Object.keys(c) as (keyof Pose)[]).forEach((key) => {
       c[key] += (target[key] - c[key]) * k;
     });
-    live.explode = c.explode;
     live.screen = c.screen;
 
     const t = state.clock.elapsedTime;

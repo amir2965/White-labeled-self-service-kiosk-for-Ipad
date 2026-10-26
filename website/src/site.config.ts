@@ -1,6 +1,7 @@
 // Everything a visitor can change or that is personal lives here.
 export const site = {
-  name: 'Amir Mahdi Sarikhanifard',
+  name: 'Mahdi Sarikhanifard',
+  firstName: 'Mahdi',
   role: 'Software engineer',
   location: 'Australia',
   github: 'https://github.com/amir2965/White-labeled-self-service-kiosk-for-Ipad',

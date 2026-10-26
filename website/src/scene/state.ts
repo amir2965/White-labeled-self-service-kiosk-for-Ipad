@@ -7,6 +7,5 @@ export const rig = {
 };
 
 export const live = {
-  explode: 0,
   screen: 0,
 };

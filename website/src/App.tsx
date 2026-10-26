@@ -52,7 +52,7 @@ export default function App() {
 
       <main>
         <Hero fallback={!use3d} />
-        <Anatomy />
+        <Anatomy inline={mobile} />
         <Demo step={step} onStep={setStep} inline={inlineDemo} />
         <Engineering />
         <Story />
@@ -61,7 +61,7 @@ export default function App() {
 
       <footer className="footer">
         <p>
-          Simulated demo: no real payments. Menu photos from Unsplash. The 3D iPad is built procedurally with three.js and is not an Apple product.
+          The demo is simulated: nothing is charged. Menu photos from Unsplash. The 3D iPad is built in code with three.js and is not an Apple product.
         </p>
         <p>© {new Date().getFullYear()} {site.name}</p>
       </footer>
