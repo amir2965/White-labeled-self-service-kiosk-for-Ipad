@@ -20,7 +20,7 @@
   text-align: left;
 }
 .kiosk * { box-sizing: border-box; }
-.kiosk button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
+:where(.kiosk) button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
 .kiosk button:disabled { opacity: 0.4; cursor: not-allowed; }
 .kiosk h3, .kiosk p { margin: 0; }
 .kiosk :focus-visible { outline: 3px solid var(--k-blue); outline-offset: 2px; }
@@ -43,9 +43,11 @@
 
 /* Welcome */
 .k-welcome { flex: 1; background-size: cover; background-position: center; position: relative; }
-.k-welcome::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5, 6, 8, 0.55), rgba(5, 6, 8, 0.82)); }
-.k-welcome-inner { position: relative; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; color: #fff; text-align: center; }
-.k-welcome h3 { font-size: 76px; line-height: 1.02; font-weight: 700; letter-spacing: -0.04em; }
+.k-welcome::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5, 6, 8, 0.35), rgba(5, 6, 8, 0.72)); }
+.k-welcome-inner { position: relative; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: #fff; text-align: center; }
+.k-welcome h3 { font-size: 84px; line-height: 1; font-weight: 700; letter-spacing: -0.04em; margin-top: 4px; }
+.k-welcome-logo { width: 104px; height: 104px; border-radius: 28px; background: #fff; display: grid; place-items: center; font-size: 54px; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45); }
+.k-tagline { font-size: 24px; opacity: 0.9; margin-bottom: 26px !important; }
 
 /* Mode / generic centre */
 .k-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; background: var(--k-bg); }

@@ -182,8 +182,8 @@ export function Product({ inline }: { inline: boolean }) {
   const viz = (i: number) => {
     if (i === 0) {
       return (
-        <VizShell n="01" title="Start an order" path="Screenshot · Flutter app, landscape tablet">
-          <img className="solo" src={shot('12-kiosk-welcome')} alt="Kiosk welcome screen with a start-order button" />
+        <VizShell n="01" title="Start an order" path="Start screen · web demo of the kiosk">
+          <img className="solo" src={shot('12-kiosk-welcome')} alt="Kiosk start screen: outdoor restaurant terrace background, café logo, title and Start order button" />
         </VizShell>
       );
     }

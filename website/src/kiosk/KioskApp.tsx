@@ -136,10 +136,11 @@ export default function KioskApp({ onStep }: { onStep?: (step: KioskStep) => voi
   return (
     <div className="kiosk" data-screen={screen}>
       {screen === 'welcome' && (
-        <div className="k-welcome" style={{ backgroundImage: `url(${PRODUCTS[0].img})` }}>
+        <div className="k-welcome" style={{ backgroundImage: `url(${import.meta.env.BASE_URL}menu/terrace.jpg)` }}>
           <div className="k-welcome-inner">
-            <p className="k-eyebrow">Demo Café</p>
-            <h3>Fresh coffee,<br />no queue.</h3>
+            <span className="k-welcome-logo" aria-hidden="true">☕</span>
+            <h3>Demo Café</h3>
+            <p className="k-tagline">Fresh coffee, no queue.</p>
             <button className="k-btn k-btn-light k-btn-xl" onClick={() => setScreen('mode')}>
               Start order
             </button>
