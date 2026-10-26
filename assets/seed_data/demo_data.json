@@ -1,0 +1,280 @@
+{
+  "cafe": {
+    "businessName": "Blue Bottle Coffee",
+    "businessType": "cafe",
+    "categories": [
+      {
+        "id": "cat-coffee",
+        "name": "Coffee",
+        "sortOrder": 0
+      },
+      {
+        "id": "cat-tea",
+        "name": "Tea",
+        "sortOrder": 1
+      },
+      {
+        "id": "cat-food",
+        "name": "Food",
+        "sortOrder": 2
+      }
+    ],
+    "products": [
+      {
+        "id": "prod-latte",
+        "name": "Latte",
+        "description": "Espresso with steamed milk",
+        "price": 4.50,
+        "categoryId": "cat-coffee",
+        "modifierGroups": [
+          {
+            "id": "mg-size",
+            "name": "Size",
+            "isRequired": true,
+            "minSelection": 1,
+            "maxSelection": 1,
+            "modifiers": [
+              { "id": "mod-small", "name": "Small (8oz)", "priceAdjustment": -0.50 },
+              { "id": "mod-medium", "name": "Medium (12oz)", "priceAdjustment": 0.0 },
+              { "id": "mod-large", "name": "Large (16oz)", "priceAdjustment": 0.50 }
+            ]
+          },
+          {
+            "id": "mg-milk",
+            "name": "Milk Type",
+            "isRequired": false,
+            "minSelection": 0,
+            "maxSelection": 1,
+            "modifiers": [
+              { "id": "mod-whole", "name": "Whole Milk", "priceAdjustment": 0.0 },
+              { "id": "mod-oat", "name": "Oat Milk", "priceAdjustment": 0.75 },
+              { "id": "mod-almond", "name": "Almond Milk", "priceAdjustment": 0.75 },
+              { "id": "mod-soy", "name": "Soy Milk", "priceAdjustment": 0.50 }
+            ]
+          },
+          {
+            "id": "mg-extras",
+            "name": "Add-ons",
+            "isRequired": false,
+            "minSelection": 0,
+            "maxSelection": 3,
+            "modifiers": [
+              { "id": "mod-shot", "name": "Extra Shot", "priceAdjustment": 0.75 },
+              { "id": "mod-vanilla", "name": "Vanilla Syrup", "priceAdjustment": 0.50 },
+              { "id": "mod-caramel", "name": "Caramel Syrup", "priceAdjustment": 0.50 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "prod-cappuccino",
+        "name": "Cappuccino",
+        "description": "Espresso with foamed milk",
+        "price": 4.50,
+        "categoryId": "cat-coffee",
+        "modifierGroups": [
+          {
+            "id": "mg-size",
+            "name": "Size",
+            "isRequired": true,
+            "minSelection": 1,
+            "maxSelection": 1,
+            "modifiers": [
+              { "id": "mod-small", "name": "Small (8oz)", "priceAdjustment": -0.50 },
+              { "id": "mod-medium", "name": "Medium (12oz)", "priceAdjustment": 0.0 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "prod-espresso",
+        "name": "Espresso",
+        "description": "Rich and bold",
+        "price": 3.50,
+        "categoryId": "cat-coffee",
+        "modifierGroups": [
+          {
+            "id": "mg-shots",
+            "name": "Shots",
+            "isRequired": true,
+            "minSelection": 1,
+            "maxSelection": 1,
+            "modifiers": [
+              { "id": "mod-single", "name": "Single", "priceAdjustment": 0.0 },
+              { "id": "mod-double", "name": "Double", "priceAdjustment": 1.00 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "prod-matcha",
+        "name": "Matcha Latte",
+        "description": "Japanese green tea latte",
+        "price": 5.00,
+        "categoryId": "cat-tea",
+        "modifierGroups": []
+      },
+      {
+        "id": "prod-croissant",
+        "name": "Butter Croissant",
+        "description": "Fresh baked daily",
+        "price": 4.00,
+        "categoryId": "cat-food",
+        "modifierGroups": []
+      },
+      {
+        "id": "prod-muffin",
+        "name": "Blueberry Muffin",
+        "description": "Made with organic blueberries",
+        "price": 3.50,
+        "categoryId": "cat-food",
+        "modifierGroups": []
+      },
+      {
+        "id": "prod-bagel",
+        "name": "Everything Bagel",
+        "description": "Toasted with cream cheese",
+        "price": 3.75,
+        "categoryId": "cat-food",
+        "modifierGroups": []
+      },
+      {
+        "id": "prod-danish",
+        "name": "Cheese Danish",
+        "description": "Sweet pastry with cream cheese filling",
+        "price": 4.25,
+        "categoryId": "cat-food",
+        "modifierGroups": []
+      },
+      {
+        "id": "prod-americano",
+        "name": "Americano",
+        "description": "Espresso with hot water",
+        "price": 3.75,
+        "categoryId": "cat-coffee",
+        "modifierGroups": []
+      },
+      {
+        "id": "prod-cold-brew",
+        "name": "Cold Brew",
+        "description": "Smooth cold brewed coffee",
+        "price": 4.75,
+        "categoryId": "cat-coffee",
+        "modifierGroups": []
+      },
+      {
+        "id": "prod-chai",
+        "name": "Chai Latte",
+        "description": "Spiced tea with steamed milk",
+        "price": 4.25,
+        "categoryId": "cat-tea",
+        "modifierGroups": []
+      }
+    ]
+  },
+  "restaurant": {
+    "businessName": "The Golden Fork",
+    "businessType": "restaurant",
+    "categories": [
+      {
+        "id": "cat-appetizers",
+        "name": "Appetizers",
+        "sortOrder": 0
+      },
+      {
+        "id": "cat-mains",
+        "name": "Main Courses",
+        "sortOrder": 1
+      },
+      {
+        "id": "cat-desserts",
+        "name": "Desserts",
+        "sortOrder": 2
+      },
+      {
+        "id": "cat-drinks",
+        "name": "Beverages",
+        "sortOrder": 3
+      }
+    ],
+    "products": [
+      {
+        "id": "prod-caesar",
+        "name": "Caesar Salad",
+        "description": "Fresh romaine with parmesan and croutons",
+        "price": 12.00,
+        "categoryId": "cat-appetizers",
+        "modifierGroups": [
+          {
+            "id": "mg-protein",
+            "name": "Add Protein",
+            "isRequired": false,
+            "minSelection": 0,
+            "maxSelection": 1,
+            "modifiers": [
+              { "id": "mod-chicken", "name": "Grilled Chicken", "priceAdjustment": 5.00 },
+              { "id": "mod-salmon", "name": "Salmon", "priceAdjustment": 8.00 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "prod-burger",
+        "name": "Classic Burger",
+        "description": "Angus beef with lettuce, tomato, onion",
+        "price": 16.00,
+        "categoryId": "cat-mains",
+        "modifierGroups": [
+          {
+            "id": "mg-temp",
+            "name": "Temperature",
+            "isRequired": true,
+            "minSelection": 1,
+            "maxSelection": 1,
+            "modifiers": [
+              { "id": "mod-rare", "name": "Rare", "priceAdjustment": 0.0 },
+              { "id": "mod-medium", "name": "Medium", "priceAdjustment": 0.0 },
+              { "id": "mod-well", "name": "Well Done", "priceAdjustment": 0.0 }
+            ]
+          },
+          {
+            "id": "mg-cheese",
+            "name": "Cheese",
+            "isRequired": false,
+            "minSelection": 0,
+            "maxSelection": 2,
+            "modifiers": [
+              { "id": "mod-cheddar", "name": "Cheddar", "priceAdjustment": 1.50 },
+              { "id": "mod-swiss", "name": "Swiss", "priceAdjustment": 1.50 },
+              { "id": "mod-blue", "name": "Blue Cheese", "priceAdjustment": 2.00 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "prod-pasta",
+        "name": "Fettuccine Alfredo",
+        "description": "Creamy parmesan sauce",
+        "price": 18.00,
+        "categoryId": "cat-mains",
+        "modifierGroups": []
+      },
+      {
+        "id": "prod-cheesecake",
+        "name": "New York Cheesecake",
+        "description": "Classic creamy cheesecake",
+        "price": 8.00,
+        "categoryId": "cat-desserts",
+        "modifierGroups": []
+      },
+      {
+        "id": "prod-soda",
+        "name": "Soft Drink",
+        "description": "Coke, Sprite, or Fanta",
+        "price": 3.00,
+        "categoryId": "cat-drinks",
+        "modifierGroups": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Checkout - Self-Service Kiosk</title>
+    <!-- Google Pay API -->
+    <script async src="https://pay.google.com/gp/p/js/pay.js" onload="onGooglePayLoaded()"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --black: #000000;
+            --blue: #007AFF;
+            --white: #FFFFFF;
+            --gray-50: #FAFAFA;
+            --gray-100: #F5F5F5;
+            --gray-200: #EEEEEE;
+            --gray-300: #E0E0E0;
+            --gray-600: #757575;
+            --gray-900: #212121;
+            --green: #34C759;
+            --red: #FF3B30;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+            background: var(--gray-50);
+            color: var(--black);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--white);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+
+        .header .order-id {
+            font-size: 14px;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        /* Content */
+        .content {
+            flex: 1;
+            padding: 24px 20px 100px;
+        }
+
+        /* Order Items */
+        .order-items {
+            margin-bottom: 32px;
+        }
+
+        .order-items h2 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.3px;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .item-details {
+            font-size: 14px;
+            color: var(--gray-600);
+        }
+
+        .item-quantity {
+            font-size: 14px;
+            color: var(--gray-600);
+            margin-right: 8px;
+        }
+
+        .item-price {
+            font-size: 16px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        /* Total Section */
+        .total-section {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .total-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .total-row.final {
+            padding-top: 16px;
+            border-top: 2px solid var(--gray-300);
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .total-label {
+            color: var(--gray-900);
+        }
+
+        .total-value {
+            font-weight: 600;
+        }
+
+        /* Payment Buttons */
+        .payment-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .payment-button {
+            width: 100%;
+            height: 56px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .payment-button:active {
+            transform: scale(0.98);
+        }
+
+        .payment-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Apple Pay Button */
+        .apple-pay-button {
+            background: var(--black);
+            color: var(--white);
+            -webkit-appearance: none;
+            appearance: none;
+            padding: 12px 16px;
+        }
+
+        .apple-pay-button img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .apple-pay-button:hover {
+            background: #1a1a1a;
+        }
+
+        /* Google Pay Button */
+        .google-pay-button {
+            background: var(--white);
+            color: var(--black);
+            border: 1px solid var(--gray-300);
+            padding: 12px 16px;
+        }
+
+        .google-pay-button img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .google-pay-button:hover {
+            background: var(--gray-50);
+        }
+
+        /* Card Payment Button */
+        .card-button {
+            background: var(--blue);
+            color: var(--white);
+        }
+
+        /* Loading State */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--gray-200);
+            border-top-color: var(--blue);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+        }
+
+        /* Success State */
+        .success {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .success.active {
+            display: block;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        .success-icon svg {
+            width: 48px;
+            height: 48px;
+            stroke: var(--white);
+        }
+
+        .success h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .success p {
+            font-size: 16px;
+            color: var(--gray-600);
+            margin-bottom: 32px;
+        }
+
+        /* Error State */
+        .error-message {
+            display: none;
+            background: #FFF5F5;
+            border: 1px solid #FFC9C9;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        .error-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--red);
+            margin-bottom: 4px;
+        }
+
+        .error-text {
+            font-size: 14px;
+            color: #C53030;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 20px;
+            text-align: center;
+            color: var(--gray-600);
+            font-size: 13px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .secure-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .secure-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .header {
+                padding: 20px 16px;
+            }
+            .content {
+                padding: 20px 16px 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Checkout</h1>
+            <div class="order-id">Order #<span id="orderId">Loading...</span></div>
+        </div>
+
+        <div class="content">
+            <!-- Error Message -->
+            <div class="error-message" id="errorMessage">
+                <div class="error-title">Payment Failed</div>
+                <div class="error-text" id="errorText"></div>
+            </div>
+
+            <!-- Order Items -->
+            <div class="order-items" id="orderItems">
+                <h2>Order Summary</h2>
+                <div id="itemsList"></div>
+            </div>
+
+            <!-- Total Section -->
+            <div class="total-section">
+                <div class="total-row">
+                    <span class="total-label">Subtotal</span>
+                    <span class="total-value" id="subtotal">$0.00</span>
+                </div>
+                <div class="total-row">
+                    <span class="total-label">Service Fee</span>
+                    <span class="total-value" id="serviceFee">$0.00</span>
+                </div>
+                <div class="total-row final">
+                    <span class="total-label">Total</span>
+                    <span class="total-value" id="total">$0.00</span>
+                </div>
+            </div>
+
+            <!-- Payment Buttons -->
+            <div class="payment-buttons" id="paymentButtons">
+                <!-- Apple Pay Button -->
+                <button class="payment-button apple-pay-button" id="applePayButton" style="display: none;">
+                    <img src="apple-pay-mark.svg" alt="Apple Pay" style="height: 40px;">
+                </button>
+
+                <!-- Google Pay Button -->
+                <button class="payment-button google-pay-button" id="googlePayButton" style="display: none;">
+                    <img src="https://www.gstatic.com/instantbuy/svg/light_gpay.svg" alt="Google Pay" style="height: 40px;">
+                </button>
+
+                <!-- Card Payment Button -->
+                <button class="payment-button card-button" id="cardButton">
+                    Pay with Card
+                </button>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <div class="loading-text">Processing Payment...</div>
+                <div style="font-size: 14px; color: var(--gray-600);">Please do not close this page</div>
+            </div>
+
+            <!-- Success State -->
+            <div class="success" id="success">
+                <div class="success-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <h2>Payment Successful!</h2>
+                <p>Your order has been confirmed.<br>Thank you for your purchase.</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="secure-badge">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                </svg>
+                Demo checkout &mdash; simulated payment, no real charge
+            </div>
+            <div>Portfolio demo project.</div>
+        </div>
+    </div>
+
+    <script>
+        // Parse URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('session') || urlParams.get('s');
+        const orderId = urlParams.get('order') || 'TEST001';
+        const amount = parseFloat(urlParams.get('amount') || '0');
+
+        // Order data
+        let orderData = null;
+        let googlePaymentsClient = null;
+
+        // Payment configuration (replace with your credentials in production)
+        const PAYMENT_CONFIG = {
+            // Apple Pay merchant ID (get from Apple Developer)
+            appleMerchantId: 'merchant.com.selfservicekiosk.demo',
+            appleMerchantName: 'Self-Service Kiosk',
+            
+            // Google Pay merchant info (get from Google Pay Business Console)
+            googleMerchantId: '01234567890123456789',
+            googleMerchantName: 'Self-Service Kiosk',
+            googleGateway: 'example', // Replace with your payment gateway
+            googleGatewayMerchantId: 'exampleGatewayMerchantId'
+        };
+
+        // Detect device capabilities
+        const isAppleDevice = /iPhone|iPad|iPod|Mac/i.test(navigator.userAgent);
+        const isAndroidDevice = /Android/i.test(navigator.userAgent);
+
+        // Initialize Google Pay
+        function onGooglePayLoaded() {
+            if (window.google && window.google.payments) {
+                googlePaymentsClient = new google.payments.api.PaymentsClient({
+                    environment: 'TEST' // Change to 'PRODUCTION' for live payments
+                });
+                checkGooglePayAvailability();
+            }
+        }
+
+        async function checkGooglePayAvailability() {
+            try {
+                const isReadyToPayRequest = {
+                    apiVersion: 2,
+                    apiVersionMinor: 0,
+                    allowedPaymentMethods: [{
+                        type: 'CARD',
+                        parameters: {
+                            allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+                            allowedCardNetworks: ['MASTERCARD', 'VISA', 'AMEX']
+                        }
+                    }]
+                };
+                
+                const response = await googlePaymentsClient.isReadyToPay(isReadyToPayRequest);
+                if (response.result) {
+                    document.getElementById('googlePayButton').style.display = 'flex';
+                }
+            } catch (error) {
+                console.error('Google Pay availability check failed:', error);
+            }
+        }
+
+        // Initialize page
+        async function initPage() {
+            document.getElementById('orderId').textContent = orderId;
+
+            // Fetch order data
+            await fetchOrderData();
+
+            // Show appropriate payment buttons
+            if (window.ApplePaySession && ApplePaySession.canMakePayments()) {
+                document.getElementById('applePayButton').style.display = 'flex';
+            }
+
+            // Google Pay button shown after API loads and checks availability
+            if (!googlePaymentsClient && window.google && window.google.payments) {
+                onGooglePayLoaded();
+            }
+
+            // Always show card button
+            document.getElementById('cardButton').style.display = 'flex';
+
+            setupEventListeners();
+        }
+
+        async function fetchOrderData() {
+            // Fetch order data from backend API with retry logic
+            let retries = 5;
+            let delay = 500; // Start with 500ms delay
+            
+            for (let attempt = 1; attempt <= retries; attempt++) {
+                try {
+                    console.log(`📥 Attempt ${attempt}: Fetching order data for: ${orderId}`);
+                    const response = await fetch(`/api/orders/${orderId}`);
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('✅ Order data received:', data);
+                        
+                        orderData = {
+                            orderId: data.orderId,
+                            items: data.items || [],
+                            subtotal: data.subtotal || 0,
+                            serviceFee: data.serviceFee || 0,
+                            total: data.total || 0
+                        };
+                        
+                        renderOrderItems();
+                        updateTotals();
+                        return; // Success!
+                    } else if (response.status === 404 && attempt < retries) {
+                        // Order not found yet, wait and retry
+                        console.log(`⏳ Order not found yet, retrying in ${delay}ms...`);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        delay *= 1.5; // Exponential backoff
+                        continue;
+                    } else {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                } catch (error) {
+                    if (attempt < retries) {
+                        console.log(`⚠️  Error fetching order, retrying in ${delay}ms...`, error);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        delay *= 1.5;
+                        continue;
+                    } else {
+                        // Final attempt failed
+                        console.error('❌ Failed to fetch order data after all retries:', error);
+                        showError('Unable to load order details. The order may still be processing. Please wait a moment and try again.');
+                        
+                        // Use URL parameters as fallback for totals only
+                        const fallbackTotal = amount || 0;
+                        const fallbackServiceFee = fallbackTotal * 0.03;
+                        const fallbackSubtotal = fallbackTotal - fallbackServiceFee;
+                        
+                        orderData = {
+                            orderId,
+                            items: [],
+                            subtotal: fallbackSubtotal,
+                            serviceFee: fallbackServiceFee,
+                            total: fallbackTotal
+                        };
+                        
+                        renderOrderItems();
+                        updateTotals();
+                    }
+                }
+            }
+        }
+
+        function renderOrderItems() {
+            const itemsList = document.getElementById('itemsList');
+            
+            if (!orderData || !orderData.items || orderData.items.length === 0) {
+                itemsList.innerHTML = `
+                    <div style="padding: 40px 20px; text-align: center; color: var(--gray-600);">
+                        <div style="font-size: 48px; margin-bottom: 16px;">⏳</div>
+                        <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">Loading order items...</div>
+                        <div style="font-size: 14px;">Please wait while we fetch your order details</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            itemsList.innerHTML = orderData.items.map(item => {
+                const itemName = item.name || item.product?.name || 'Unknown Item';
+                const itemQty = item.quantity || 1;
+                const itemBasePrice = item.basePrice || item.product?.price || 0;
+                const itemPrice = item.price || item.totalPrice || 0;
+                const totalPrice = itemPrice * itemQty;
+                const itemNotes = item.notes || '';
+                
+                // Build detailed modifier display with prices
+                let modifiersHTML = '';
+                if (item.modifiers && item.modifiers.length > 0) {
+                    const hasAnyPaidModifiers = item.modifiers.some(m => {
+                        const modPrice = m.modifier?.priceAdjustment || m.priceAdjustment || 0;
+                        return modPrice > 0;
+                    });
+                    
+                    modifiersHTML = item.modifiers.map(m => {
+                        const modName = m.modifier?.name || m.name || 'Option';
+                        const modPrice = m.modifier?.priceAdjustment || m.priceAdjustment || 0;
+                        // Only show price if there are any paid modifiers in the list
+                        const priceText = modPrice > 0 
+                            ? `+$${modPrice.toFixed(2)}` 
+                            : (hasAnyPaidModifiers ? 'FREE' : '');
+                        const priceDisplay = priceText ? ` <span style="color: var(--gray-600); font-size: 13px;">(${priceText})</span>` : '';
+                        return `<div class="item-details">• ${modName}${priceDisplay}</div>`;
+                    }).join('');
+                } else if (item.details) {
+                    modifiersHTML = `<div class="item-details">${item.details}</div>`;
+                }
+                
+                return `
+                    <div class="item">
+                        <div class="item-info">
+                            <div class="item-name">${itemName}</div>
+                            <div class="item-details" style="color: var(--gray-600); font-size: 13px; margin-top: 2px;">Base: $${itemBasePrice.toFixed(2)}</div>
+                            ${modifiersHTML}
+                            ${itemNotes ? `<div class="item-details" style="font-style: italic; margin-top: 4px;">Note: ${itemNotes}</div>` : ''}
+                            <div class="item-quantity" style="margin-top: 8px;">Qty: ${itemQty}</div>
+                        </div>
+                        <div class="item-price">$${totalPrice.toFixed(2)}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateTotals() {
+            document.getElementById('subtotal').textContent = `$${orderData.subtotal.toFixed(2)}`;
+            document.getElementById('serviceFee').textContent = `$${orderData.serviceFee.toFixed(2)}`;
+            document.getElementById('total').textContent = `$${orderData.total.toFixed(2)}`;
+        }
+
+        function setupEventListeners() {
+            document.getElementById('applePayButton').addEventListener('click', processApplePay);
+            document.getElementById('googlePayButton').addEventListener('click', processGooglePay);
+            document.getElementById('cardButton').addEventListener('click', processCardPayment);
+        }
+
+        function showLoading() {
+            document.getElementById('orderItems').style.display = 'none';
+            document.getElementById('paymentButtons').style.display = 'none';
+            document.getElementById('errorMessage').classList.remove('active');
+            document.getElementById('loading').classList.add('active');
+        }
+
+        function showSuccess() {
+            document.getElementById('loading').classList.remove('active');
+            document.getElementById('success').classList.add('active');
+        }
+
+        function showError(message) {
+            document.getElementById('errorText').textContent = message;
+            document.getElementById('errorMessage').classList.add('active');
+            document.getElementById('loading').classList.remove('active');
+            document.getElementById('orderItems').style.display = 'block';
+            document.getElementById('paymentButtons').style.display = 'flex';
+        }
+
+        async function processApplePay() {
+            if (!window.ApplePaySession) {
+                showError('Apple Pay is not available on this device.');
+                return;
+            }
+
+            try {
+                // Define Apple Pay payment request
+                const request = {
+                    countryCode: 'US',
+                    currencyCode: 'USD',
+                    supportedNetworks: ['visa', 'masterCard', 'amex', 'discover'],
+                    merchantCapabilities: ['supports3DS'],
+                    total: {
+                        label: PAYMENT_CONFIG.appleMerchantName,
+                        amount: orderData.total.toFixed(2)
+                    },
+                    lineItems: orderData.items.map(item => ({
+                        label: item.name,
+                        amount: item.price.toFixed(2)
+                    }))
+                };
+
+                // Create Apple Pay session
+                const session = new ApplePaySession(3, request);
+
+                // Handle merchant validation
+                session.onvalidatemerchant = async (event) => {
+                    try {
+                        // For demo: Skip validation by simulating a successful validation
+                        // In production: Call your server to validate with Apple
+                        console.log('🍎 Apple Pay merchant validation requested');
+                        console.log('   Validation URL:', event.validationURL);
+                        
+                        // PRODUCTION CODE (uncomment when backend is ready):
+                        // const merchantSession = await fetch('/api/apple-pay/validate', {
+                        //     method: 'POST',
+                        //     headers: { 'Content-Type': 'application/json' },
+                        //     body: JSON.stringify({ validationURL: event.validationURL })
+                        // }).then(r => r.json());
+                        // session.completeMerchantValidation(merchantSession);
+                        
+                        // For demo: Try to proceed (will fail at authorization without real merchant ID)
+                        // This allows testing the UI flow
+                        console.warn('⚠️  Using demo mode - real payments require merchant validation');
+                        
+                        // Create a mock merchant session for demo purposes
+                        const mockMerchantSession = {
+                            epochTimestamp: Date.now(),
+                            expiresAt: Date.now() + 300000,
+                            merchantSessionIdentifier: 'DEMO_SESSION',
+                            nonce: 'demo_nonce',
+                            merchantIdentifier: PAYMENT_CONFIG.appleMerchantId,
+                            displayName: PAYMENT_CONFIG.appleMerchantName,
+                            signature: 'demo_signature'
+                        };
+                        
+                        try {
+                            session.completeMerchantValidation(mockMerchantSession);
+                        } catch (validationError) {
+                            console.log('Mock validation failed (expected without real merchant ID)');
+                            // For demo: proceed to card payment instead
+                            session.abort();
+                            showError('Apple Pay demo requires a configured merchant account. Use "Pay with Card" for testing.');
+                        }
+                    } catch (error) {
+                        console.error('Merchant validation error:', error);
+                        session.abort();
+                        showError('Apple Pay is not configured. Please use "Pay with Card" instead.');
+                    }
+                };
+
+                // Handle payment authorization
+                session.onpaymentauthorized = async (event) => {
+                    showLoading();
+                    
+                    try {
+                        // Send payment token to your server
+                        const paymentToken = event.payment.token;
+                        
+                        // Process payment through your backend
+                        const response = await fetch('/api/payments/process', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                orderId: orderData.orderId,
+                                paymentToken,
+                                amount: orderData.total,
+                                paymentMethod: 'apple_pay'
+                            })
+                        });
+
+                        if (response.ok) {
+                            const result = await response.json();
+                            
+                            // Complete the session
+                            session.completePayment(ApplePaySession.STATUS_SUCCESS);
+                            
+                            // Update order status
+                            await updatePaymentStatus('paid');
+                            
+                            showSuccess();
+                        } else {
+                            session.completePayment(ApplePaySession.STATUS_FAILURE);
+                            showError('Payment processing failed. Please try again.');
+                        }
+                    } catch (error) {
+                        console.error('Payment authorization failed:', error);
+                        session.completePayment(ApplePaySession.STATUS_FAILURE);
+                        showError('Payment failed: ' + error.message);
+                    }
+                };
+
+                // Handle cancellation
+                session.oncancel = () => {
+                    showError('Apple Pay was cancelled.');
+                };
+
+                // Start the session
+                session.begin();
+                
+            } catch (error) {
+                console.error('Apple Pay error:', error);
+                showError('Apple Pay failed: ' + error.message);
+            }
+        }
+
+        async function processGooglePay() {
+            if (!googlePaymentsClient) {
+                showError('Google Pay is not available.');
+                return;
+            }
+
+            try {
+                // Define Google Pay payment data request
+                const paymentDataRequest = {
+                    apiVersion: 2,
+                    apiVersionMinor: 0,
+                    allowedPaymentMethods: [{
+                        type: 'CARD',
+                        parameters: {
+                            allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+                            allowedCardNetworks: ['MASTERCARD', 'VISA', 'AMEX']
+                        },
+                        tokenizationSpecification: {
+                            type: 'PAYMENT_GATEWAY',
+                            parameters: {
+                                gateway: PAYMENT_CONFIG.googleGateway,
+                                gatewayMerchantId: PAYMENT_CONFIG.googleGatewayMerchantId
+                            }
+                        }
+                    }],
+                    merchantInfo: {
+                        merchantId: PAYMENT_CONFIG.googleMerchantId,
+                        merchantName: PAYMENT_CONFIG.googleMerchantName
+                    },
+                    transactionInfo: {
+                        totalPriceStatus: 'FINAL',
+                        totalPriceLabel: 'Total',
+                        totalPrice: orderData.total.toFixed(2),
+                        currencyCode: 'USD',
+                        countryCode: 'US',
+                        displayItems: [
+                            {
+                                label: 'Subtotal',
+                                type: 'SUBTOTAL',
+                                price: orderData.subtotal.toFixed(2)
+                            },
+                            {
+                                label: 'Service Fee',
+                                type: 'LINE_ITEM',
+                                price: orderData.serviceFee.toFixed(2)
+                            }
+                        ]
+                    }
+                };
+
+                // Load payment data (opens Google Pay sheet)
+                const paymentData = await googlePaymentsClient.loadPaymentData(paymentDataRequest);
+                
+                showLoading();
+                
+                // Process the payment token
+                const paymentToken = paymentData.paymentMethodData.tokenizationData.token;
+                
+                try {
+                    // Send payment token to your server for processing
+                    const response = await fetch('/api/payments/process', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            orderId: orderData.orderId,
+                            paymentToken,
+                            amount: orderData.total,
+                            paymentMethod: 'google_pay'
+                        })
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        
+                        // Update order status
+                        await updatePaymentStatus('paid');
+                        
+                        showSuccess();
+                    } else {
+                        const error = await response.json();
+                        showError('Payment processing failed: ' + (error.message || 'Unknown error'));
+                    }
+                } catch (error) {
+                    console.error('Payment processing failed:', error);
+                    showError('Payment failed: ' + error.message);
+                }
+                
+            } catch (error) {
+                // User cancelled or error occurred
+                if (error.statusCode === 'CANCELED') {
+                    showError('Google Pay was cancelled.');
+                } else {
+                    console.error('Google Pay error:', error);
+                    showError('Google Pay failed: ' + error.message);
+                }
+            }
+        }
+
+        async function processCardPayment() {
+            showLoading();
+
+            // For demo: Simulate card payment processing
+            // In production: Use a payment provider SDK (e.g. Stripe Elements)
+            try {
+                // Simulate payment processing delay
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                // Send payment request to backend
+                const response = await fetch('/api/payments/process', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        orderId: orderData.orderId,
+                        amount: orderData.total,
+                        paymentMethod: 'card',
+                        // In production, include tokenized card data
+                        cardToken: 'demo_card_token_' + Date.now()
+                    })
+                });
+
+                if (response.ok || response.status === 404) {
+                    // Update order status
+                    await updatePaymentStatus('paid');
+                    showSuccess();
+                } else {
+                    const error = await response.json().catch(() => ({}));
+                    showError('Card payment failed: ' + (error.message || 'Please try again.'));
+                }
+            } catch (error) {
+                console.error('Card payment error:', error);
+                showError('Card payment failed: ' + error.message);
+            }
+        }
+
+        async function updatePaymentStatus(status) {
+            try {
+                console.log('💳 Updating payment status:', { orderId: orderData.orderId, sessionId, status });
+                
+                // Update payment session status
+                const response = await fetch(`/api/payment-sessions/${sessionId || orderData.orderId}/status`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        status,
+                        orderId: orderData.orderId,
+                        paidAt: new Date().toISOString()
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('✅ Payment status updated:', result);
+                    return result;
+                } else {
+                    console.warn('⚠️  Payment status update returned:', response.status);
+                    // Don't throw error - payment may have succeeded even if status update fails
+                    return null;
+                }
+            } catch (error) {
+                console.error('❌ Failed to update payment status:', error);
+                // Don't throw - payment may have succeeded even if status update fails
+                return null;
+            }
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>
