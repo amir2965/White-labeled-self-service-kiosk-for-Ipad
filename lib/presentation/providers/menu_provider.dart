@@ -654,7 +654,8 @@ class MenuNotifier extends StateNotifier<MenuState> {
               ? (data['price'] as num).toDouble()
               : 0.0,
           isAvailable: true,
-          imageUrl: _getPlaceholderImage(categoryId),
+          imageUrl:
+              (data['imageUrl'] as String?) ?? _getPlaceholderImage(categoryId),
           modifierGroups: modifierGroups,
           sortOrder: entry.key,
         );

@@ -10,7 +10,8 @@ final brandingSettingsProvider =
     });
 
 class BrandingSettingsNotifier extends StateNotifier<BrandingSettings> {
-  BrandingSettingsNotifier() : super(const BrandingSettings());
+  BrandingSettingsNotifier([BrandingSettings initial = const BrandingSettings()])
+    : super(initial);
 
   void updateTemplate(WelcomePageTemplate template) {
     state = state.copyWith(welcomeTemplate: template);

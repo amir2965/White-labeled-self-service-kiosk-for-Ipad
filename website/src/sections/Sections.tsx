@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import KioskApp, { type KioskStep } from '../kiosk/KioskApp';
+import FlutterDemo, { FLOWS, type FlowId } from '../kiosk/FlutterDemo';
 import { MILKS, PRODUCTS, SIZES, money, serviceFee } from '../kiosk/data';
 import { site } from '../site.config';
 
@@ -280,15 +280,6 @@ export function Product({ inline }: { inline: boolean }) {
 
 /* ----------------------------------------------------------------- Demo */
 
-const STEPS: { id: KioskStep[]; label: string; hint: string }[] = [
-  { id: ['welcome'], label: 'Welcome', hint: 'Tap to begin. In the real app the owner chooses this page’s photo, font and colours.' },
-  { id: ['mode'], label: 'Dine in or takeaway', hint: 'The customer says how they want the order.' },
-  { id: ['menu'], label: 'Browse the menu', hint: 'Same sample menu as the Flutter app.' },
-  { id: ['customize'], label: 'Customise', hint: 'Size is required, milk is optional. The price updates as you choose.' },
-  { id: ['checkout'], label: 'Checkout', hint: 'Subtotal plus a 2.5% + $0.30 service fee, the same rule as the app.' },
-  { id: ['qr', 'done'], label: 'Pay (simulated)', hint: 'Scan to pay or pay at the counter. Nothing is charged.' },
-];
-
 function ScaledStage({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.5);
@@ -306,7 +297,16 @@ function ScaledStage({ children }: { children: ReactNode }) {
   );
 }
 
-export function Demo({ step, onStep, inline }: { step: KioskStep; onStep: (s: KioskStep) => void; inline: boolean }) {
+interface DemoProps {
+  flow: FlowId;
+  nonce: number;
+  onFlow: (f: FlowId) => void;
+  onRestart: () => void;
+  inline: boolean;
+}
+
+export function Demo({ flow, nonce, onFlow, onRestart, inline }: DemoProps) {
+  const cur = FLOWS.find((f) => f.id === flow)!;
   return (
     <section id="demo" className="section demo" aria-labelledby="demo-title">
       <div className="demo-sticky">
@@ -314,40 +314,46 @@ export function Demo({ step, onStep, inline }: { step: KioskStep; onStep: (s: Ki
           <p className="eyebrow">02 / Interactive demo</p>
           <h2 id="demo-title">Give it a try.</h2>
           <p className="lede">
-            The easiest way to understand the project is to use it. Explore the menu, customise a coffee, add items to your
-            cart and go through checkout.
-            {inline
-              ? ' Designed for landscape tablets; works best in landscape or on a bigger screen.'
-              : ' It’s a live screen inside the 3D iPad, designed primarily for landscape tablets, so tap away.'}
+            This is the Flutter app itself, built for the web. Pick an experience to explore
+            {inline ? ' (best in landscape or on a bigger screen).' : ', then use it inside the 3D iPad.'}
           </p>
-          <ol className="steps" aria-label="Ordering steps">
-            {STEPS.map((s, i) => {
-              const on = s.id.includes(step);
-              return (
-                <li key={s.label} className={on ? 'on' : ''} aria-current={on ? 'step' : undefined}>
-                  <span>{i + 1}</span>
-                  <div>
-                    <strong>{s.label}</strong>
-                    <small>{s.hint}</small>
-                  </div>
-                </li>
-              );
-            })}
-          </ol>
+          <div className="flows" role="group" aria-label="Choose an experience">
+            {FLOWS.map((f, i) => (
+              <button
+                type="button"
+                key={f.id}
+                className={`flow${f.id === flow ? ' on' : ''}`}
+                aria-pressed={f.id === flow}
+                onClick={() => onFlow(f.id)}
+              >
+                <span className="n">{i + 1}</span>
+                <span className="t">
+                  <strong>{f.title}</strong>
+                  <small>{f.blurb}</small>
+                </span>
+              </button>
+            ))}
+          </div>
+          <div className="flow-foot">
+            <Badge tone={cur.tone}>{cur.tag}</Badge>
+            <button type="button" className="restart" onClick={onRestart}>
+              Restart
+            </button>
+          </div>
           <p className="note">
-            <b>Demo note:</b> all products and prices are sample data. The checkout is simulated; no real payment takes place.
+            <b>Demo note:</b> all products, prices and sales figures are sample data. Payment and menu scanning are simulated; no real payment takes place.
           </p>
         </div>
         {inline && (
           <div className="inline-device">
             <ScaledStage>
-              <KioskApp onStep={onStep} />
+              <FlutterDemo flow={flow} nonce={nonce} />
             </ScaledStage>
           </div>
         )}
         {!inline && (
           <p className="demo-badge" aria-hidden="true">
-            <i />Live demo · sample data · payment simulated
+            <i />Real Flutter app · sample data · payment simulated
           </p>
         )}
       </div>

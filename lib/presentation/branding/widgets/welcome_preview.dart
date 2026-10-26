@@ -8,7 +8,11 @@ import '../../../core/constants/app_colors.dart';
 class WelcomePreview extends StatelessWidget {
   final BrandingSettings settings;
 
-  const WelcomePreview({Key? key, required this.settings}) : super(key: key);
+  /// Called when the start button is tapped (previews leave this null)
+  final VoidCallback? onButtonTap;
+
+  const WelcomePreview({Key? key, required this.settings, this.onButtonTap})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -465,7 +469,7 @@ class WelcomePreview extends StatelessWidget {
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: () {},
+              onTap: onButtonTap ?? () {},
               borderRadius: BorderRadius.circular(settings.buttonBorderRadius),
               child: Center(
                 child: Text(

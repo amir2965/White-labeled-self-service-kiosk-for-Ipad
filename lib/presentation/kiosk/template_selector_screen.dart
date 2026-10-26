@@ -228,21 +228,39 @@ class _TemplateSelectorScreenState
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.all(AppSpacing.md),
-              itemCount: _templates.length,
-              itemBuilder: (context, index) {
-                final template = _templates[index];
-                final isSelected = _selectedTemplate == template.template;
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                Widget card(int index) {
+                  final template = _templates[index];
+                  return _TemplateCard(
+                    option: template,
+                    isSelected: _selectedTemplate == template.template,
+                    onTap: () {
+                      setState(() {
+                        _selectedTemplate = template.template;
+                      });
+                    },
+                  );
+                }
 
-                return _TemplateCard(
-                  option: template,
-                  isSelected: isSelected,
-                  onTap: () {
-                    setState(() {
-                      _selectedTemplate = template.template;
-                    });
-                  },
+                // Landscape tablets: two columns so more layouts are visible at once
+                if (constraints.maxWidth >= 800) {
+                  return GridView.builder(
+                    padding: EdgeInsets.all(AppSpacing.md),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: AppSpacing.md,
+                      mainAxisExtent: 184,
+                    ),
+                    itemCount: _templates.length,
+                    itemBuilder: (context, index) => card(index),
+                  );
+                }
+
+                return ListView.builder(
+                  padding: EdgeInsets.all(AppSpacing.md),
+                  itemCount: _templates.length,
+                  itemBuilder: (context, index) => card(index),
                 );
               },
             ),

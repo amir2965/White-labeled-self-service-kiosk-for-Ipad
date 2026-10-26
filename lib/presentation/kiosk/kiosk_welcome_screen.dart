@@ -65,7 +65,10 @@ class _KioskWelcomeScreenState extends ConsumerState<KioskWelcomeScreen> {
         child: Stack(
           children: [
             // Use the branded welcome preview as the main content
-            WelcomePreview(settings: brandingSettings),
+            WelcomePreview(
+              settings: brandingSettings,
+              onButtonTap: hasStarted ? null : _startOrder,
+            ),
 
             // Overlay interactive elements for order mode selection
             if (hasStarted)

@@ -16,10 +16,8 @@ import '../features/payouts/presentation/screens/activity_screen.dart';
 import '../features/payouts/presentation/screens/transfer_settings_screen.dart';
 import '../features/payouts/presentation/screens/settlement_details_screen.dart';
 
-/// Application router configuration
-final appRouter = GoRouter(
-  initialLocation: '/dashboard',
-  routes: [
+/// Application route table (shared by the production router and the web demo)
+final List<RouteBase> appRoutes = [
     // Auth routes
     GoRoute(
       path: '/',
@@ -188,5 +186,7 @@ final appRouter = GoRouter(
         child: const KitchenDisplayScreen(),
       ),
     ),
-  ],
-);
+];
+
+/// Application router configuration
+final appRouter = GoRouter(initialLocation: '/dashboard', routes: appRoutes);

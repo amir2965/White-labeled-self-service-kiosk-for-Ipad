@@ -1,5 +1,5 @@
 import { lazy, Suspense, useCallback, useMemo, useState } from 'react';
-import KioskApp, { type KioskStep } from './kiosk/KioskApp';
+import FlutterDemo, { type FlowId } from './kiosk/FlutterDemo';
 import { About, Decisions, Demo, Engineering, Hero, Merchant, Product, State } from './sections/Sections';
 import { hasWebGL, useMedia, useReveal, useScrollRig } from './hooks';
 import { site } from './site.config';
@@ -13,7 +13,13 @@ export default function App() {
   const use3d = webgl && !reduced;
   const inlineDemo = mobile || !use3d;
 
-  const [step, setStep] = useState<KioskStep>('welcome');
+  const [flow, setFlow] = useState<FlowId>('order');
+  const [nonce, setNonce] = useState(0);
+  const onFlow = useCallback((f: FlowId) => {
+    setFlow(f);
+    setNonce((n) => n + 1);
+  }, []);
+  const onRestart = useCallback(() => setNonce((n) => n + 1), []);
   const [demoActive, setDemoActive] = useState(false);
   const onDemoActive = useCallback((a: boolean) => setDemoActive(a), []);
 
@@ -46,7 +52,7 @@ export default function App() {
             <Scene
               mobile={mobile}
               liveActive={demoActive && !mobile}
-              liveChildren={mobile ? null : <KioskApp onStep={setStep} />}
+              liveChildren={mobile ? null : <FlutterDemo flow={flow} nonce={nonce} />}
             />
           </Suspense>
         )}
@@ -57,7 +63,7 @@ export default function App() {
       <main>
         <Hero fallback={!use3d} />
         <Product inline={mobile} />
-        <Demo step={step} onStep={setStep} inline={inlineDemo} />
+        <Demo flow={flow} nonce={nonce} onFlow={onFlow} onRestart={onRestart} inline={inlineDemo} />
         <Merchant inline={inlineDemo} />
         <Engineering inline={mobile} />
         <Decisions />

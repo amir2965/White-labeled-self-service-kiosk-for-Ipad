@@ -12,6 +12,7 @@ import '../../core/constants/app_spacing.dart';
 import '../../core/constants/app_typography.dart';
 import '../../core/widgets/app_button.dart';
 import '../providers/cart_provider.dart';
+import '../../demo/demo_config.dart';
 
 class QRPaymentScreen extends ConsumerStatefulWidget {
   final String orderId;
@@ -59,6 +60,12 @@ class _QRPaymentScreenState extends ConsumerState<QRPaymentScreen> {
   }
 
   Future<void> _storeOrderData() async {
+    if (DemoConfig.enabled) {
+      // Browser demo: no payment server, so just pretend to prepare the session.
+      await Future.delayed(const Duration(milliseconds: 600));
+      if (mounted) setState(() => _isStoring = false);
+      return;
+    }
     try {
       // Get API base URL
       String apiUrl;
@@ -132,6 +139,7 @@ class _QRPaymentScreenState extends ConsumerState<QRPaymentScreen> {
   }
 
   Future<void> _checkPaymentStatus() async {
+    if (DemoConfig.enabled) return; // the demo confirms via the button below
     try {
       // Get API base URL
       String apiUrl;
@@ -312,6 +320,8 @@ class _QRPaymentScreenState extends ConsumerState<QRPaymentScreen> {
       );
     }
 
+    if (DemoConfig.enabled) return _buildDemoQrScreen();
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -394,6 +404,128 @@ class _QRPaymentScreenState extends ConsumerState<QRPaymentScreen> {
                       ),
                     ],
                   ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDemoQrScreen() {
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: SafeArea(
+        child: Column(
+          children: [
+            _buildHeader(),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSpacing.xxl,
+                  vertical: AppSpacing.lg,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: Container(
+                          padding: EdgeInsets.all(AppSpacing.lg),
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: BorderRadius.circular(
+                              AppSpacing.radiusLg,
+                            ),
+                            border: Border.all(color: AppColors.gray200),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.06),
+                                blurRadius: 24,
+                                offset: Offset(0, 8),
+                              ),
+                            ],
+                          ),
+                          child: QrImageView(
+                            data: _paymentUrl,
+                            version: QrVersions.auto,
+                            size: 260,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: AppSpacing.xl),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Scan to Pay', style: AppTypography.display2),
+                          SizedBox(height: AppSpacing.sm),
+                          Text(
+                            'Use your phone camera to scan',
+                            style: AppTypography.bodyLarge.copyWith(
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                          SizedBox(height: AppSpacing.lg),
+                          Text('Total Amount', style: AppTypography.label),
+                          Text(
+                            '\$${widget.totalAmount.toStringAsFixed(2)}',
+                            style: AppTypography.priceLarge,
+                          ),
+                          SizedBox(height: AppSpacing.sm),
+                          Text(
+                            'Time remaining: ${_formatTime(_secondsRemaining)}',
+                            style: AppTypography.bodyMedium.copyWith(
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                          SizedBox(height: AppSpacing.lg),
+                          Container(
+                            padding: EdgeInsets.all(AppSpacing.md),
+                            decoration: BoxDecoration(
+                              color: AppColors.blue.withOpacity(0.06),
+                              borderRadius: BorderRadius.circular(
+                                AppSpacing.radiusLg,
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Demo: no real payment',
+                                  style: AppTypography.bodyMedium.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                SizedBox(height: AppSpacing.xs),
+                                Text(
+                                  'There is no payment server in this demo. Press the button to play the customer\'s phone confirming the payment.',
+                                  style: AppTypography.bodySmall.copyWith(
+                                    color: AppColors.textSecondary,
+                                  ),
+                                ),
+                                SizedBox(height: AppSpacing.md),
+                                AppButton(
+                                  label: 'Simulate phone payment',
+                                  icon: Icons.smartphone,
+                                  size: AppButtonSize.large,
+                                  onPressed: _onPaymentSuccess,
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: AppSpacing.md),
+                          AppButton(
+                            label: 'Cancel',
+                            onPressed: () => Navigator.pop(context),
+                            variant: AppButtonVariant.outline,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

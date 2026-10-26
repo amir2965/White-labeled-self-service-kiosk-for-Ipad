@@ -138,14 +138,24 @@ h3 { font-size: 1.25rem; letter-spacing: -0.02em; font-weight: 600; }
 .demo-panel { width: min(370px, 30vw); margin-left: max(24px, calc((100vw - 1200px) / 2)); padding: 26px; border: 1px solid var(--line); border-radius: 24px; background: var(--panel); backdrop-filter: blur(18px); display: flex; flex-direction: column; }
 .demo-panel h2 { font-size: clamp(2rem, 3.2vw, 3rem); }
 .demo-panel .lede { font-size: 0.95rem; margin-top: 12px; }
-.steps { list-style: none; padding: 0; margin: 22px 0 0; display: grid; gap: 4px; }
-.steps li { display: flex; gap: 12px; padding: 8px 10px; border-radius: 12px; opacity: 0.5; transition: opacity 0.3s, background 0.3s; }
-.steps li.on { opacity: 1; background: rgba(91, 157, 255, 0.12); }
-.steps li > span { flex: none; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font-size: 11px; margin-top: 1px; }
-.steps li.on > span { background: var(--accent); border-color: var(--accent); color: #05070a; font-weight: 700; }
-.steps strong { font-size: 14px; font-weight: 600; display: block; }
-.steps small { color: var(--mute); font-size: 12px; line-height: 1.4; display: none; }
-.steps li.on small { display: block; }
+.flows { display: grid; gap: 4px; margin: 20px 0 0; }
+.flow { appearance: none; font: inherit; color: var(--ink); text-align: left; cursor: pointer; display: flex; gap: 12px; padding: 9px 10px; border-radius: 14px; border: 1px solid transparent; background: transparent; opacity: 0.6; transition: opacity 0.25s, background 0.25s, border-color 0.25s, transform 0.25s var(--ease); }
+.flow:hover { opacity: 1; background: rgba(255, 255, 255, 0.04); }
+.flow.on { opacity: 1; background: rgba(91, 157, 255, 0.12); border-color: rgba(91, 157, 255, 0.4); }
+.flow .n { flex: none; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font-size: 11px; margin-top: 1px; }
+.flow.on .n { background: var(--accent); border-color: var(--accent); color: #05070a; font-weight: 700; }
+.flow strong { font-size: 14px; font-weight: 600; display: block; }
+.flow small { color: var(--mute); font-size: 12px; line-height: 1.4; display: none; margin-top: 2px; }
+.flow.on small { display: block; }
+.flow-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; }
+.restart { appearance: none; font: inherit; font-size: 12px; color: var(--mute); background: rgba(255, 255, 255, 0.04); border: 1px solid var(--line); border-radius: 999px; padding: 5px 14px; cursor: pointer; transition: color 0.2s, border-color 0.2s; }
+.restart:hover { color: var(--ink); border-color: rgba(255, 255, 255, 0.3); }
+.flutter-demo { position: relative; width: 100%; height: 100%; background: #fff; overflow: hidden; border-radius: 18px; }
+.flutter-demo iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+.flutter-loading { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 14px; background: #0b0c10; color: var(--mute); font-size: 13px; letter-spacing: 0.04em; transition: opacity 0.5s var(--ease) 0.15s; }
+.flutter-loading i { width: 30px; height: 30px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, 0.12); border-top-color: var(--accent); animation: spin 0.9s linear infinite; }
+.flutter-loading.done { opacity: 0; pointer-events: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
 .note { margin-top: 18px; font-size: 12px; color: var(--mute); border-top: 1px solid var(--line); padding-top: 14px; }
 .note b { color: var(--ink); font-weight: 600; }
 .inline-device { margin: 0 24px 0 24px; flex: 1; min-width: 0; padding: 12px; border-radius: 28px; background: linear-gradient(145deg, #3a3d44, #202226); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5); }
@@ -264,9 +274,9 @@ h3 { font-size: 1.25rem; letter-spacing: -0.02em; font-weight: 600; }
   .demo-panel { padding: 16px 18px; }
   .demo-panel .lede { display: none; }
   .demo-panel h2 { font-size: 2rem; }
-  .steps { margin-top: 12px; gap: 0; }
-  .steps li { padding: 5px 8px; }
-  .steps small { display: none !important; }
+  .flows { margin-top: 10px; gap: 0; }
+  .flow { padding: 6px 8px; }
+  .flow small { font-size: 11.5px; }
   .note { margin-top: 10px; padding-top: 10px; font-size: 11px; }
 }
 
