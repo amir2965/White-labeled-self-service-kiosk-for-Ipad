@@ -19,7 +19,7 @@ A tablet-style, self-service ordering kiosk with a merchant back office, built w
   </tr>
   <tr>
 
-    <td align="center"><img src="docs/screenshots/11-kiosk-exit-pin.png" width="450" alt="Exit kiosk mode PIN pad"><br><b>Staff PIN to exit kiosk mode</b></td>
+  <td align="center"><img src="docs/screenshots/11-kiosk-exit-pin.png" width="450" alt="Exit kiosk mode PIN pad"><br><b>Staff PIN to exit kiosk mode</b></td>
   </tr>
 </table>
 
