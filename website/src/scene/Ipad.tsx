@@ -10,7 +10,16 @@ const IPAD_D = 0.16;
 const SCREEN_W = 4.0;
 const SCREEN_H = SCREEN_W / 1.4388; // matches the screenshot aspect ratio
 
-export const SCREENS = ['12-kiosk-welcome', '05-qr-payment', '01-dashboard', '06-kitchen-display', '07-analytics'];
+// Order matters: poses cross-fade through neighbouring indexes.
+export const SCREENS = [
+  '12-kiosk-welcome',
+  '05-qr-payment',
+  '01-dashboard',
+  '09-branding-typography',
+  '03-template-gallery',
+  '06-kitchen-display',
+  '07-analytics',
+];
 
 // drei's <Html transform> renders at 40 CSS px per world unit (distanceFactor 10), so the prop
 // scale that maps LIVE_W px onto the screen mesh is world width * 40 / px width.

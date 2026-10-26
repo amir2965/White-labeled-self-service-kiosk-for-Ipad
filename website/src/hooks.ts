@@ -47,6 +47,8 @@ export function useScrollRig(onDemoActive: (active: boolean) => void) {
         onDemoActive(active);
       }
       const doc = document.documentElement;
+      const glow = i === 2 ? Math.min(1, rig.frac / 0.12, (1 - rig.frac) / 0.2) : 0;
+      doc.style.setProperty('--glow', String(Math.max(0, glow)));
       doc.style.setProperty('--progress', String(clamp(window.scrollY / Math.max(doc.scrollHeight - window.innerHeight, 1), 0, 1)));
     };
     const onScroll = () => {

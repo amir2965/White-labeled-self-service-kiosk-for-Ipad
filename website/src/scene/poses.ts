@@ -16,13 +16,16 @@ const P = (p: Partial<Pose>): Pose => ({ x: 0, y: 0, w: 0.4, rx: 0, ry: 0, rz: 0
 const HERO_A = P({ x: 0.52, w: 0.42, rx: 0.1, ry: -0.45, rz: 0.03 });
 const HERO_B = P({ x: 0.46, w: 0.42, rx: 0.14, ry: -0.7, rz: 0.04 });
 const DEMO = P({ x: 0.33, w: 0.6, rx: 0.015, ry: -0.015 });
-// The iPad steps out while the "four layers" visuals take the stage.
+// The iPad steps out while the product walkthrough visuals take the stage.
 const AWAY = P({ x: 0.33, w: 0.6, rx: 0.015, ry: -0.015, vis: 0 });
-const ENGINEERING = P({ x: 0.66, y: 0.52, w: 0.24, rx: 0.12, ry: -0.9, screen: 2 });
-const STORY = P({ x: -0.68, y: 0, w: 0.26, rx: 0.08, ry: 0.7, screen: 3 });
-const ABOUT = P({ x: 0.64, y: -0.08, w: 0.3, rx: 0.06, ry: -0.4, screen: 4 });
+// Merchant: the iPad sits right of the copy and flips through the admin screens as the steps scroll by.
+const MERCH = (screen: number, vis = 1) => P({ x: 0.46, y: 0, w: 0.42, rx: 0.06, ry: -0.35, screen, vis });
+// Decisions: iPad on the left, copy on the right.
+const DECISIONS = P({ x: -0.68, y: 0, w: 0.26, rx: 0.08, ry: 0.7, screen: 1 });
+const ABOUT = P({ x: 0.64, y: -0.08, w: 0.3, rx: 0.06, ry: -0.4, screen: 6 });
 // Between far-apart poses the iPad shrinks away and reappears, so it never slides behind text panels.
-const STORY_HIDDEN = { ...STORY, vis: 0 };
+const MERCH_HIDDEN = MERCH(6, 0);
+const DECISIONS_HIDDEN = { ...DECISIONS, vis: 0 };
 const ABOUT_HIDDEN = { ...ABOUT, vis: 0 };
 
 export interface Section {
@@ -33,10 +36,12 @@ export interface Section {
 
 export const SECTIONS: Section[] = [
   { id: 'hero', keyframes: [HERO_A, HERO_B] },
-  { id: 'anatomy', keyframes: [HERO_B, AWAY, AWAY, AWAY, AWAY, AWAY] },
-  { id: 'demo', keyframes: [AWAY, DEMO, DEMO, DEMO, ENGINEERING] },
-  { id: 'engineering', keyframes: [ENGINEERING, ENGINEERING, STORY_HIDDEN] },
-  { id: 'story', keyframes: [STORY_HIDDEN, STORY, STORY, ABOUT_HIDDEN] },
+  { id: 'product', keyframes: [HERO_B, AWAY, AWAY, AWAY, AWAY, AWAY] },
+  { id: 'demo', keyframes: [AWAY, DEMO, DEMO, DEMO, MERCH(2)] },
+  { id: 'merchant', keyframes: [MERCH(2), MERCH(2), MERCH(3), MERCH(3), MERCH(4), MERCH(5), MERCH(6), MERCH_HIDDEN] },
+  { id: 'engineering', keyframes: [MERCH_HIDDEN, DECISIONS_HIDDEN] },
+  { id: 'decisions', keyframes: [DECISIONS_HIDDEN, DECISIONS, DECISIONS, ABOUT_HIDDEN] },
+  { id: 'state', keyframes: [ABOUT_HIDDEN, ABOUT_HIDDEN] },
   { id: 'about', keyframes: [ABOUT_HIDDEN, ABOUT, ABOUT] },
 ];
 

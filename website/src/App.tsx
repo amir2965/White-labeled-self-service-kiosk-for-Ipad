@@ -1,6 +1,6 @@
 import { lazy, Suspense, useCallback, useMemo, useState } from 'react';
 import KioskApp, { type KioskStep } from './kiosk/KioskApp';
-import { About, Anatomy, Demo, Engineering, Hero, Story } from './sections/Sections';
+import { About, Decisions, Demo, Engineering, Hero, Merchant, Product, State } from './sections/Sections';
 import { hasWebGL, useMedia, useReveal, useScrollRig } from './hooks';
 import { site } from './site.config';
 
@@ -30,9 +30,12 @@ export default function App() {
           Self-Service Kiosk
         </a>
         <nav aria-label="Primary">
+          <a href="#product">Product</a>
           <a href="#demo">Demo</a>
+          <a href="#merchant">Merchant</a>
           <a href="#engineering">Engineering</a>
-          <a href="#story">Story</a>
+          <a href="#state">Current state</a>
+          <a href="#about">About</a>
           <a href={site.github} target="_blank" rel="noreferrer">GitHub ↗</a>
         </nav>
       </header>
@@ -48,18 +51,24 @@ export default function App() {
           </Suspense>
         )}
         {!use3d && <div className="stage-fallback" aria-hidden="true" />}
+        {use3d && !mobile && <div className="stage-glow" aria-hidden="true" />}
       </div>
 
       <main>
         <Hero fallback={!use3d} />
-        <Anatomy inline={mobile} />
+        <Product inline={mobile} />
         <Demo step={step} onStep={setStep} inline={inlineDemo} />
-        <Engineering />
-        <Story />
+        <Merchant inline={inlineDemo} />
+        <Engineering inline={mobile} />
+        <Decisions />
+        <State />
         <About />
       </main>
 
       <footer className="footer">
+        <p>
+          Built with Flutter and Dart. Project showcase developed using React, Three.js and React Three Fiber.
+        </p>
         <p>
           The demo is simulated: nothing is charged. Menu photos from Unsplash. The 3D iPad is built in code with three.js and is not an Apple product.
         </p>
