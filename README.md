@@ -22,7 +22,8 @@ A tablet-style, self-service ordering kiosk with a merchant back office, built w
     <td align="center"><img src="docs/screenshots/06-kitchen-display.png" width="450" alt="Kitchen display"><br><b>Kitchen display</b></td>
   </tr>
   <tr>
-    <td align="center" colspan="2"><img src="docs/screenshots/07-analytics.png" alt="Sales analytics" width="450"><br><b>Sales analytics</b></td>
+    <td align="center"><img src="docs/screenshots/07-analytics.png" alt="Sales analytics" width="450"><br><b>Sales analytics</b></td>
+    <td align="center"><img src="docs/screenshots/08-ai-menu-scan.png" width="450" alt="AI menu scanning guidelines"><br><b>Optional AI menu scanning (needs your own API key)</b></td>
   </tr>
 </table>
 
