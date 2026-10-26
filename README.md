@@ -4,10 +4,27 @@ A tablet-style, self-service ordering kiosk with a merchant back office, built w
 
 > **Portfolio project.** All payments are **simulated** — no real payment provider, card data, or database is used.
 
-<!-- Add screenshots to docs/screenshots/ and uncomment:
-![Kiosk menu](docs/screenshots/menu.png)
-![QR payment](docs/screenshots/qr-payment.png)
--->
+## Screenshots
+
+<sub>Captured in Chrome at iPad size. Analytics and kitchen screens show generated sample data; payments are simulated.</sub>
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/01-dashboard.png" width="450" alt="Merchant dashboard"><br><b>Merchant dashboard</b></td>
+    <td align="center"><img src="docs/screenshots/02-onboarding.png" width="450" alt="Onboarding wizard"><br><b>5-step onboarding wizard</b></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/03-template-gallery.png" width="450" alt="Menu template gallery"><br><b>Menu template gallery</b></td>
+    <td align="center"><img src="docs/screenshots/04-menu-management.png" width="450" alt="Menu management"><br><b>Menu management</b></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/05-qr-payment.png" width="450" alt="QR payment screen"><br><b>QR payment (simulated)</b></td>
+    <td align="center"><img src="docs/screenshots/06-kitchen-display.png" width="450" alt="Kitchen display"><br><b>Kitchen display</b></td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2"><img src="docs/screenshots/07-analytics.png" alt="Sales analytics" width="450"><br><b>Sales analytics</b></td>
+  </tr>
+</table>
 
 ## What works
 
