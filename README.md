@@ -18,8 +18,8 @@ A tablet-style, self-service ordering kiosk with a merchant back office, built w
     <td align="center"><img src="docs/screenshots/04-menu-management.png" width="450" alt="Menu management"><br><b>Menu management</b></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/screenshots/05-qr-payment.png" width="450" alt="QR payment screen"><br><b>QR payment (simulated)</b></td>
-    <td align="center"><img src="docs/screenshots/06-kitchen-display.png" width="450" alt="Kitchen display"><br><b>Kitchen display</b></td>
+    <td align="center"><img src="docs/screenshots/05-qr-payment.png" width="450" alt="QR payment screen"><br><b>Kitchen display</b></td>
+    <td align="center"><img src="docs/screenshots/06-kitchen-display.png" width="450" alt="Kitchen display"><br><b>QR payment (simulated)</b></td>
   </tr>
   <tr>
     <td align="center"><img src="docs/screenshots/07-analytics.png" alt="Sales analytics" width="450"><br><b>Sales analytics</b></td>
