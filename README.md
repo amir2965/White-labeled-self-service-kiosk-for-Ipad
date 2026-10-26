@@ -83,16 +83,13 @@ flutter test
 
 Covers only the payouts `Money` model and CSV export so far.
 
-## Known limitations
+## limitations
 
 - Everything is **in-memory** (menu edits, orders, payment sessions reset on restart); no database.
 - Payments are simulated; the mock server has no authentication, webhook signing or HTTPS.
 - Kitchen display, analytics and payouts use generated sample data.
 - Some dependencies in `pubspec.yaml` (hive, dio/retrofit, mobile_scanner, wakelock_plus) are declared but not used yet.
 - Test coverage is minimal; `flutter analyze` reports lint-level infos/warnings but no errors.
-- Only web has been verified; iOS/Android builds are untested.
-- Informal development notes are in [docs/notes/](docs/notes) and may be outdated.
+- Only web has been verified; iOS/Android builds are required.
 
-## Possible next steps
 
-Real persistence (SQLite/Postgres), a payment-provider sandbox, wiring kitchen display and analytics to submitted orders, widget/integration tests, CI.
