@@ -181,7 +181,7 @@ class MenuNotifier extends StateNotifier<MenuState> {
             price: 3.50,
             isAvailable: true,
             imageUrl:
-                'https://images.unsplash.com/photo-1484244233201-29892afe6a2c?w=400',
+                'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400',
             modifierGroups: [],
           ),
           Product(

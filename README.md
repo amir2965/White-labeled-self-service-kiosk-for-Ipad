@@ -3,10 +3,26 @@
 A tablet-style, self-service ordering kiosk with a merchant back office, built with Flutter (web-first demo). Customers browse a menu, customise items, and pay either **at the counter** or by **scanning a QR code** that opens a simulated phone checkout page.
 
 > **Portfolio project.** All payments are **simulated** — no real payment provider, card data, or database is used.
+>
+> Project story: [read the LinkedIn post](https://lnkd.in/p/gej2HySb).
 
 ## Screenshots
 
-<sub>Captured in Chrome at iPad size. Analytics and kitchen screens show generated sample data; payments are simulated.</sub>
+<sub>Captured in Chrome at iPad size. Analytics, payouts and kitchen screens show generated sample data; payments are simulated.</sub>
+
+### Customer kiosk
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/12-kiosk-welcome.png" width="450" alt="Kiosk welcome screen"><br><b>Welcome screen</b></td>
+    <td align="center"><img src="docs/screenshots/05-qr-payment.png" width="450" alt="QR payment screen"><br><b>QR payment (simulated)</b></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/11-kiosk-exit-pin.png" width="450" alt="Exit kiosk mode PIN pad"><br><b>Staff PIN to exit kiosk mode</b></td>
+  </tr>
+</table>
+
+### Merchant back office
 
 <table>
   <tr>
@@ -14,16 +30,20 @@ A tablet-style, self-service ordering kiosk with a merchant back office, built w
     <td align="center"><img src="docs/screenshots/02-onboarding.png" width="450" alt="Onboarding wizard"><br><b>5-step onboarding wizard</b></td>
   </tr>
   <tr>
+    <td align="center"><img src="docs/screenshots/08-ai-menu-scan.png" width="450" alt="AI menu scanning guidelines"><br><b>Optional AI menu scanning (needs your own API key)</b></td>
     <td align="center"><img src="docs/screenshots/03-template-gallery.png" width="450" alt="Menu template gallery"><br><b>Menu template gallery</b></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/09-branding-typography.png" width="450" alt="Branding typography selection"><br><b>Branding: 25-font typography selector</b></td>
     <td align="center"><img src="docs/screenshots/04-menu-management.png" width="450" alt="Menu management"><br><b>Menu management</b></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/screenshots/05-qr-payment.png" width="450" alt="QR payment screen"><br><b>Kitchen display</b></td>
-    <td align="center"><img src="docs/screenshots/06-kitchen-display.png" width="450" alt="Kitchen display"><br><b>QR payment (simulated)</b></td>
+  <tr>
+    <td align="center"><img src="docs/screenshots/06-kitchen-display.png" width="450" alt="Kitchen display"><br><b>Kitchen display</b></td>
+    <td align="center"><img src="docs/screenshots/07-analytics.png" width="450" alt="Sales analytics"><br><b>Sales analytics</b></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/screenshots/07-analytics.png" alt="Sales analytics" width="450"><br><b>Sales analytics</b></td>
-    <td align="center"><img src="docs/screenshots/08-ai-menu-scan.png" width="450" alt="AI menu scanning guidelines"><br><b>Optional AI menu scanning (needs your own API key)</b></td>
+    <td align="center"><img src="docs/screenshots/10-payouts-activity.png" width="450" alt="Payouts activity"><br><b>Payouts activity &amp; PDF export</b></td>
   </tr>
 </table>
 
