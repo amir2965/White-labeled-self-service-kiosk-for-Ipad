@@ -20,8 +20,8 @@ A tablet-style, self-service ordering kiosk with a merchant back office, built w
     <td align="center"><img src="docs/screenshots/13-kiosk-menu.png" width="450" alt="Kiosk menu"><br><b>Menu with categories</b></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/screenshots/05-qr-payment.png" width="450" alt="QR payment screen"><br><b>QR payment (simulated)</b></td>
-    <td align="center"><img src="docs/screenshots/11-kiosk-exit-pin.png" width="450" alt="Exit kiosk mode PIN pad"><br><b>Staff PIN to exit kiosk mode</b></td>
+
+  <td align="center"><img src="docs/screenshots/11-kiosk-exit-pin.png" width="450" alt="Exit kiosk mode PIN pad"><br><b>Staff PIN to exit kiosk mode</b></td>
   </tr>
 </table>
 
