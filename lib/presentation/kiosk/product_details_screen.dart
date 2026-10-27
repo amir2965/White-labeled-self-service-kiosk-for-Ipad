@@ -146,14 +146,15 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen>
   @override
   Widget build(BuildContext context) {
     final totalPrice = _calculateTotalPrice();
+    final compact = MediaQuery.sizeOf(context).width < 600;
 
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
       child: Dialog(
         backgroundColor: AppColors.white,
         insetPadding: EdgeInsets.symmetric(
-          horizontal: AppSpacing.screenPadding * 2,
-          vertical: AppSpacing.screenPadding,
+          horizontal: compact ? 8 : AppSpacing.screenPadding * 2,
+          vertical: compact ? 8 : AppSpacing.screenPadding,
         ),
         child: Container(
           constraints: const BoxConstraints(maxWidth: 900, maxHeight: 750),
@@ -184,7 +185,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen>
 
   Widget _buildHeader() {
     return Container(
-      padding: EdgeInsets.all(AppSpacing.lg),
+      padding: EdgeInsets.all(MediaQuery.sizeOf(context).width < 600 ? 16 : AppSpacing.lg),
       decoration: BoxDecoration(
         color: AppColors.white,
         border: Border(bottom: BorderSide(color: AppColors.gray200)),
@@ -806,9 +807,10 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen>
 
   Widget _buildFooter(double totalPrice) {
     final isLastStep = _currentStep == _totalSteps - 1;
+    final compact = MediaQuery.sizeOf(context).width < 600;
 
     return Container(
-      padding: EdgeInsets.all(AppSpacing.lg),
+      padding: EdgeInsets.all(compact ? 12 : AppSpacing.lg),
       decoration: BoxDecoration(
         color: AppColors.white,
         border: Border(top: BorderSide(color: AppColors.gray200)),
@@ -838,8 +840,8 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.arrow_back, color: AppColors.gray700),
-                    SizedBox(width: 8),
+                    if (!compact) Icon(Icons.arrow_back, color: AppColors.gray700),
+                    if (!compact) SizedBox(width: 8),
                     Text(
                       'Back',
                       style: AppTypography.bodyLarge.copyWith(
@@ -859,7 +861,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen>
             flex: 2,
             child: AppButton(
               label: isLastStep
-                  ? 'Add to Cart • \$${totalPrice.toStringAsFixed(2)}'
+                  ? '${compact ? 'Add' : 'Add to Cart'} • \$${totalPrice.toStringAsFixed(2)}'
                   : 'Continue',
               onPressed: _canProceed
                   ? (isLastStep ? _addToCart : _nextStep)

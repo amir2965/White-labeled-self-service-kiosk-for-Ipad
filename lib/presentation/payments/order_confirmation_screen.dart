@@ -164,6 +164,7 @@ class _OrderConfirmationScreenState
 
   @override
   Widget build(BuildContext context) {
+    final compact = MediaQuery.sizeOf(context).width < 600;
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -175,7 +176,9 @@ class _OrderConfirmationScreenState
                 width: double.infinity,
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.all(AppSpacing.screenPadding),
+                  padding: compact
+                      ? const EdgeInsets.fromLTRB(20, 96, 20, 24)
+                      : EdgeInsets.all(AppSpacing.screenPadding),
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
                       minHeight: MediaQuery.of(context).size.height - 100,
@@ -187,8 +190,8 @@ class _OrderConfirmationScreenState
                         ScaleTransition(
                           scale: _pulseAnimation,
                           child: Container(
-                            width: 140,
-                            height: 140,
+                            width: compact ? 88 : 140,
+                            height: compact ? 88 : 140,
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 begin: Alignment.topLeft,
@@ -209,7 +212,7 @@ class _OrderConfirmationScreenState
                             ),
                             child: Icon(
                               Icons.check_circle_outline,
-                              size: 80,
+                              size: compact ? 52 : 80,
                               color: AppColors.white,
                             ),
                           ),
@@ -220,7 +223,7 @@ class _OrderConfirmationScreenState
                         Text(
                           'Order Received!',
                           style: AppTypography.display1.copyWith(
-                            fontSize: 48,
+                            fontSize: compact ? 32 : 48,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -245,7 +248,7 @@ class _OrderConfirmationScreenState
                             style: AppTypography.h2.copyWith(
                               color: AppColors.blue,
                               fontWeight: FontWeight.w700,
-                              fontSize: 28,
+                              fontSize: compact ? 20 : 28,
                               letterSpacing: 1.2,
                             ),
                           ),
@@ -254,7 +257,7 @@ class _OrderConfirmationScreenState
 
                         // Instructions
                         Container(
-                          padding: EdgeInsets.all(AppSpacing.xl),
+                          padding: EdgeInsets.all(compact ? 16 : AppSpacing.xl),
                           decoration: BoxDecoration(
                             color: AppColors.white,
                             borderRadius: BorderRadius.circular(20),

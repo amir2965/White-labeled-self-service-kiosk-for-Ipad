@@ -154,7 +154,7 @@ class _KioskMenuScreenState extends ConsumerState<KioskMenuScreen> {
           ),
           const Spacer(),
           // Cart Summary
-          if (cartState.itemCount > 0)
+          if (cartState.itemCount > 0 && MediaQuery.sizeOf(context).width >= 600)
             Container(
               padding: EdgeInsets.symmetric(
                 horizontal: AppSpacing.md,

@@ -57,6 +57,7 @@ class _KioskWelcomeScreenState extends ConsumerState<KioskWelcomeScreen> {
     // Get branding settings
     final brandingSettings = ref.watch(brandingSettingsProvider);
     final size = MediaQuery.of(context).size;
+    final compact = size.width < 600;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -76,7 +77,8 @@ class _KioskWelcomeScreenState extends ConsumerState<KioskWelcomeScreen> {
                 color: Colors.black.withOpacity(0.5),
                 child: Center(
                   child: Container(
-                    padding: EdgeInsets.all(48),
+                    margin: EdgeInsets.symmetric(horizontal: compact ? 16 : 0),
+                    padding: EdgeInsets.all(compact ? 20 : 48),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
@@ -99,7 +101,8 @@ class _KioskWelcomeScreenState extends ConsumerState<KioskWelcomeScreen> {
                           ),
                         ),
                         SizedBox(height: 32),
-                        Row(
+                        Flex(
+                          direction: compact ? Axis.vertical : Axis.horizontal,
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             _ModeButton(
@@ -108,7 +111,7 @@ class _KioskWelcomeScreenState extends ConsumerState<KioskWelcomeScreen> {
                               isSelected: selectedMode == OrderMode.dineIn,
                               onTap: () => _selectMode(OrderMode.dineIn),
                             ),
-                            SizedBox(width: 32),
+                            SizedBox(width: compact ? 0 : 32, height: compact ? 12 : 0),
                             _ModeButton(
                               label: 'Takeaway',
                               icon: Icons.shopping_bag_outlined,
@@ -149,8 +152,8 @@ class _ModeButton extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        width: 200,
-        height: 160,
+        width: MediaQuery.sizeOf(context).width < 600 ? double.infinity : 200,
+        height: MediaQuery.sizeOf(context).width < 600 ? 112 : 160,
         decoration: BoxDecoration(
           border: Border.all(
             color: isSelected ? AppColors.blue : AppColors.gray300,

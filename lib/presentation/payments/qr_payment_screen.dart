@@ -414,6 +414,45 @@ class _QRPaymentScreenState extends ConsumerState<QRPaymentScreen> {
   }
 
   Widget _buildDemoQrScreen() {
+    if (MediaQuery.sizeOf(context).width < 600) {
+      return Scaffold(
+        backgroundColor: AppColors.background,
+        body: SafeArea(
+          child: Column(
+            children: [
+              _buildHeader(),
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.all(20),
+                  children: [
+                    Text('Scan to Pay', style: AppTypography.h2),
+                    const SizedBox(height: 12),
+                    Text('Use your phone camera to scan', style: AppTypography.bodyLarge),
+                    const SizedBox(height: 20),
+                    Center(child: QrImageView(data: _paymentUrl, version: QrVersions.auto, size: 200)),
+                    const SizedBox(height: 20),
+                    Text('Total Amount', style: AppTypography.label),
+                    Text('\$${widget.totalAmount.toStringAsFixed(2)}', style: AppTypography.priceLarge),
+                    Text('Time remaining: ${_formatTime(_secondsRemaining)}', style: AppTypography.bodyMedium),
+                    const SizedBox(height: 24),
+                    Text('Demo: no real payment', style: AppTypography.h4),
+                    const SizedBox(height: 8),
+                    Text(
+                      'There is no payment server in this demo. Press the button to play the customer\'s phone confirming the payment.',
+                      style: AppTypography.bodySmall,
+                    ),
+                    const SizedBox(height: 16),
+                    AppButton(label: 'Simulate phone payment', onPressed: _onPaymentSuccess, size: AppButtonSize.large),
+                    const SizedBox(height: 12),
+                    AppButton(label: 'Cancel', onPressed: () => Navigator.pop(context), variant: AppButtonVariant.outline),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(

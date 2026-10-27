@@ -15,6 +15,7 @@ import '../presentation/onboarding/steps/template_selection_step.dart';
 import '../presentation/providers/cart_provider.dart';
 import '../presentation/providers/menu_provider.dart';
 import 'demo_config.dart';
+import 'demo_viewport.dart';
 import 'menu_scan_demo_screen.dart';
 
 /// Branding used by the demo kiosk (the app itself starts with a blank brand).
@@ -87,7 +88,9 @@ class DemoApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
       routerConfig: demoRouter,
-      builder: (context, child) => _AdaptiveCursor(child: child!),
+      builder: (context, child) => _AdaptiveCursor(
+        child: DemoViewport(router: demoRouter, child: child!),
+      ),
       // Mouse and trackpad drag-scroll like a touch screen.
       scrollBehavior: const MaterialScrollBehavior().copyWith(
         dragDevices: {

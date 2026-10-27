@@ -24,6 +24,7 @@ class _CategorySidebarTemplateState
   int _selectedCategoryIndex = 0;
 
   int _getGridColumns(BuildContext context) {
+    if (MediaQuery.sizeOf(context).width < 600) return 1;
     final width = MediaQuery.of(context).size.width - 220; // Minus sidebar
     if (width > 1400) return 4;
     if (width > 1100) return 3;
@@ -42,12 +43,15 @@ class _CategorySidebarTemplateState
     final selectedCategory = categories[_selectedCategoryIndex];
     final products = menuState.getProductsByCategory(selectedCategory.id);
     final isLastCategory = _selectedCategoryIndex == categories.length - 1;
+    final compact = MediaQuery.sizeOf(context).width < 600;
 
-    return Row(
+    return Flex(
+      direction: compact ? Axis.vertical : Axis.horizontal,
       children: [
         // Left Sidebar - Categories
         Container(
-          width: 220,
+          width: compact ? double.infinity : 220,
+          height: compact ? 80 : null,
           decoration: BoxDecoration(
             color: AppColors.white,
             border: Border(
@@ -62,6 +66,7 @@ class _CategorySidebarTemplateState
             ],
           ),
           child: ListView.builder(
+            scrollDirection: compact ? Axis.horizontal : Axis.vertical,
             itemCount: categories.length,
             itemBuilder: (context, index) {
               final category = categories[index];
@@ -175,6 +180,7 @@ class _CategoryButton extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         height: 72,
+        width: MediaQuery.sizeOf(context).width < 600 ? 160 : null,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         decoration: BoxDecoration(
