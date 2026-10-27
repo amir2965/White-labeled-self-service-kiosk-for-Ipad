@@ -78,9 +78,7 @@ export function Statement({ reduced }: { reduced: boolean }) {
       <div className="wrap statement-copy" data-reveal>
         <div className="panel-in">
           <p className="eyebrow">The idea</p>
-          <h2 id="statement-title">
-            <em>White-labelled</em>: one product, many brands.
-          </h2>
+          <h2 id="statement-title">One product, many brands.</h2>
           <p className="lede">
             The same kiosk app can carry a different name, logo, colours, fonts and menu layout for each business. This
             project explores how far that idea can go.
