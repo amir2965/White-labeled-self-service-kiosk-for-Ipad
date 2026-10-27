@@ -130,6 +130,16 @@ class _Seeded extends ConsumerStatefulWidget {
   ConsumerState<_Seeded> createState() => _SeededState();
 }
 
+/// Sample-menu photos whose original links are dead; replaced with bundled ones.
+const _imageFixes = {
+  'Mocha': 'hotchoc',
+  'Affogato': 'espresso',
+  'Everything Bagel': 'croissant',
+  'Chai Latte': 'matcha',
+  'Chamomile': 'matcha',
+  'Lemon Scone': 'muffin',
+};
+
 class _SeededState extends ConsumerState<_Seeded> {
   bool _ready = false;
 
@@ -138,7 +148,16 @@ class _SeededState extends ConsumerState<_Seeded> {
     super.initState();
     Future.microtask(() async {
       ref.read(cartProvider.notifier).clear();
-      await ref.read(menuProvider.notifier).seedDemoMenu('cafe');
+      final menu = ref.read(menuProvider.notifier);
+      await menu.seedDemoMenu('cafe');
+      for (final p in ref.read(menuProvider).products) {
+        final fix = _imageFixes[p.name];
+        if (fix != null) {
+          menu.updateProduct(
+            p.copyWith(imageUrl: DemoConfig.assetUrl('demo/menu/$fix.jpg')),
+          );
+        }
+      }
       if (!mounted) return;
       setState(() => _ready = true);
       widget.onReady?.call(context);

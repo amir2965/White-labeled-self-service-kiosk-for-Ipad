@@ -9,6 +9,7 @@ import '../../providers/menu_provider.dart';
 import '../../providers/featured_display_provider.dart';
 import '../product_details_screen.dart';
 import '../widgets/kiosk_exit_button.dart';
+import '../widgets/kiosk_layout.dart';
 import 'cart_sidebar_panel.dart';
 
 /// Template: Restaurant Spotlight + Cart
@@ -260,16 +261,21 @@ class _SpotlightHero extends ConsumerWidget {
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: AppColors.gray300.withOpacity(0.7)),
       ),
-      child: isLandscape ? _buildLandscapeLayout() : _buildPortraitLayout(),
+      child: isLandscape
+          ? _buildLandscapeLayout(context)
+          : _buildPortraitLayout(),
     );
   }
 
-  Widget _buildLandscapeLayout() {
+  Widget _buildLandscapeLayout(BuildContext context) {
     return Row(
       children: [
         Expanded(child: _buildContent()),
         SizedBox(width: AppSpacing.lg),
-        _buildImage(width: 240, height: 140),
+        _buildImage(
+          width: MediaQuery.of(context).size.width < 1100 ? 200 : 240,
+          height: 140,
+        ),
       ],
     );
   }
@@ -448,7 +454,9 @@ class _SpotlightGrid extends StatelessWidget {
             MediaQuery.of(context).orientation == Orientation.landscape;
         final crossAxisCount = width > 1100 ? 3 : 2;
         // Taller aspect ratio to accommodate description text
-        final aspectRatio = isLandscape ? 1.6 : 1.15;
+        final aspectRatio = isCompactKiosk(context)
+            ? 1.22
+            : (isLandscape ? 1.6 : 1.15);
 
         return GridView.builder(
           shrinkWrap: true,
@@ -553,12 +561,12 @@ class _SpotlightCard extends ConsumerWidget {
                       product.name,
                       style: AppTypography.bodyLarge.copyWith(
                         fontWeight: FontWeight.w900,
-                        fontSize: 20,
+                        fontSize: isCompactKiosk(context) ? 18 : 20,
                         height: 1.2,
                         letterSpacing: -0.4,
                         color: AppColors.black,
                       ),
-                      maxLines: 2,
+                      maxLines: isCompactKiosk(context) ? 1 : 2,
                       overflow: TextOverflow.ellipsis,
                     ),
 
@@ -573,11 +581,11 @@ class _SpotlightCard extends ConsumerWidget {
                         height: 1.4,
                         fontWeight: FontWeight.w500,
                       ),
-                      maxLines: 2,
+                      maxLines: isCompactKiosk(context) ? 1 : 2,
                       overflow: TextOverflow.ellipsis,
                     ),
 
-                    SizedBox(height: 8),
+                    const Spacer(),
 
                     // Price at bottom - always visible
                     Text(

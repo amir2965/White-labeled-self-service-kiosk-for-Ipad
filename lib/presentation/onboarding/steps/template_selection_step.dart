@@ -191,6 +191,15 @@ class _TemplateSelectionStepState extends ConsumerState<TemplateSelectionStep> {
     ),
   ];
 
+  // The web demo leaves out layouts that do not add anything to a short walkthrough.
+  List<_TemplateOption> get _visibleTemplates => DemoConfig.enabled
+      ? _templates
+            .where(
+              (t) => t.template != MenuDisplayTemplate.coffeeBaristaWithCheckout,
+            )
+            .toList()
+      : _templates;
+
   @override
   void initState() {
     super.initState();
@@ -282,7 +291,7 @@ class _TemplateSelectionStepState extends ConsumerState<TemplateSelectionStep> {
                       Wrap(
                         spacing: AppSpacing.md,
                         runSpacing: AppSpacing.md,
-                        children: _templates
+                        children: _visibleTemplates
                             .map(
                               (template) => SizedBox(
                                 width:
@@ -295,7 +304,7 @@ class _TemplateSelectionStepState extends ConsumerState<TemplateSelectionStep> {
                             .toList(),
                       )
                     else
-                      ..._templates.map(
+                      ..._visibleTemplates.map(
                         (template) => Padding(
                           padding: EdgeInsets.only(bottom: AppSpacing.md),
                           child: _buildTemplateCard(template),

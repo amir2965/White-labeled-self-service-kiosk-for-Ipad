@@ -9,6 +9,7 @@ import '../../providers/cart_provider.dart';
 import '../../providers/menu_provider.dart';
 import '../product_details_screen.dart';
 import '../widgets/kiosk_exit_button.dart';
+import '../widgets/kiosk_layout.dart';
 import 'cart_sidebar_panel.dart';
 
 /// Template: Restaurant Course Navigator + Cart (Image Version)
@@ -52,7 +53,7 @@ class _RestaurantCourseNavigatorWithCartImageTemplateState
         children: [
           // Left Sidebar - Categories
           Container(
-            width: 220,
+            width: kioskCategoryRailWidth(context),
             decoration: BoxDecoration(
               color: AppColors.white,
               border: Border(
@@ -165,6 +166,8 @@ class _MenuItemCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final compact = isCompactKiosk(context);
+    final cardH = compact ? 190.0 : 175.0;
     return GestureDetector(
       onTap: () {
         showDialog(
@@ -173,7 +176,7 @@ class _MenuItemCard extends ConsumerWidget {
         );
       },
       child: Container(
-        height: 175, // Increased from 160 for more bottom space
+        height: cardH,
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
@@ -190,8 +193,8 @@ class _MenuItemCard extends ConsumerWidget {
           children: [
             // Product Image
             Container(
-              width: 200,
-              height: 175,
+              width: compact ? 150 : 200,
+              height: cardH,
               decoration: BoxDecoration(
                 color: AppColors.gray100,
                 borderRadius: const BorderRadius.only(
@@ -233,10 +236,10 @@ class _MenuItemCard extends ConsumerWidget {
             Expanded(
               child: Padding(
                 padding: EdgeInsets.fromLTRB(
-                  AppSpacing.lg,
-                  AppSpacing.lg,
-                  AppSpacing.lg,
-                  AppSpacing.lg,
+                  compact ? AppSpacing.md : AppSpacing.lg,
+                  compact ? AppSpacing.md : AppSpacing.lg,
+                  compact ? AppSpacing.md : AppSpacing.lg,
+                  compact ? AppSpacing.md : AppSpacing.lg,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -301,7 +304,7 @@ class _MenuItemCard extends ConsumerWidget {
 
                         // Add to Cart Button
                         SizedBox(
-                          width: 120,
+                          width: compact ? 100 : 120,
                           height: 44,
                           child: ElevatedButton(
                             onPressed: () {

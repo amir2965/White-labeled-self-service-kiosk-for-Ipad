@@ -6,6 +6,7 @@ import '../../../core/constants/app_typography.dart';
 import '../../providers/menu_provider.dart';
 import '../product_details_screen.dart';
 import '../widgets/kiosk_exit_button.dart';
+import '../widgets/kiosk_layout.dart';
 
 /// Template: Restaurant Menu Board
 /// Typography-first, minimal menu board with category navigation (no cards).
@@ -40,7 +41,7 @@ class _RestaurantMenuBoardTemplateState
       children: [
         // Left Sidebar - Categories
         Container(
-          width: 220,
+          width: kioskCategoryRailWidth(context),
           decoration: BoxDecoration(
             color: AppColors.white,
             border: Border(
@@ -123,7 +124,11 @@ class _RestaurantMenuBoardTemplateState
                           ),
                         )
                       : ListView(
-                          padding: EdgeInsets.all(AppSpacing.xl),
+                          padding: EdgeInsets.all(
+                            isCompactKiosk(context)
+                                ? AppSpacing.md
+                                : AppSpacing.xl,
+                          ),
                           children: [
                             ...products.map((product) {
                               return _MenuRow(
@@ -166,11 +171,14 @@ class _MenuRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final compact = isCompactKiosk(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.only(bottom: AppSpacing.lg),
-        padding: EdgeInsets.all(AppSpacing.xl),
+        margin: EdgeInsets.only(
+          bottom: compact ? AppSpacing.md : AppSpacing.lg,
+        ),
+        padding: EdgeInsets.all(compact ? AppSpacing.lg : AppSpacing.xl),
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(18),
@@ -189,11 +197,11 @@ class _MenuRow extends StatelessWidget {
                   Text(
                     title,
                     style: AppTypography.h3.copyWith(
-                      fontSize: 26,
+                      fontSize: compact ? 21 : 26,
                       fontWeight: FontWeight.w800,
-                      height: 1.3,
+                      height: 1.25,
                     ),
-                    maxLines: 1,
+                    maxLines: compact ? 2 : 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   if (subtitle.trim().isNotEmpty) ...[
@@ -202,33 +210,33 @@ class _MenuRow extends StatelessWidget {
                       subtitle,
                       style: AppTypography.bodyLarge.copyWith(
                         color: AppColors.gray600,
-                        fontSize: 18,
+                        fontSize: compact ? 15 : 18,
                         height: 1.4,
                       ),
-                      maxLines: 3,
+                      maxLines: compact ? 2 : 3,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ],
               ),
             ),
-            SizedBox(width: AppSpacing.xl),
+            SizedBox(width: compact ? AppSpacing.md : AppSpacing.xl),
             Text(
               '\$${price.toStringAsFixed(2)}',
               style: AppTypography.h3.copyWith(
                 fontWeight: FontWeight.w900,
-                fontSize: 28,
+                fontSize: compact ? 22 : 28,
               ),
             ),
-            SizedBox(width: AppSpacing.lg),
+            SizedBox(width: compact ? AppSpacing.md : AppSpacing.lg),
             Container(
-              width: 52,
-              height: 52,
+              width: compact ? 44 : 52,
+              height: compact ? 44 : 52,
               decoration: BoxDecoration(
                 color: AppColors.black,
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: Icon(Icons.add, color: AppColors.white, size: 28),
+              child: Icon(Icons.add, color: AppColors.white, size: 26),
             ),
           ],
         ),

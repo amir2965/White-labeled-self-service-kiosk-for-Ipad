@@ -8,6 +8,7 @@ import '../../providers/menu_provider.dart';
 import '../../providers/featured_display_provider.dart';
 import '../product_details_screen.dart';
 import '../widgets/kiosk_exit_button.dart';
+import '../widgets/kiosk_layout.dart';
 
 /// Template: Promo Banner Grid
 /// Modern, minimal layout with a top promo banner + category chips + spacious grid.
@@ -163,11 +164,11 @@ class _LandscapeLayout extends StatelessWidget {
             child: GridView.builder(
               padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               itemCount: products.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 18,
                 mainAxisSpacing: 18,
-                childAspectRatio: 1.50,
+                childAspectRatio: isCompactKiosk(context) ? 1.2 : 1.50,
               ),
               itemBuilder: (context, index) {
                 final product = products[index];
@@ -190,7 +191,7 @@ class _LandscapeLayout extends StatelessWidget {
         // Featured items scrollable column on right
         if (featured.isNotEmpty)
           Container(
-            width: 320,
+            width: isCompactKiosk(context) ? 250 : 320,
             color: AppColors.white,
             child: Column(
               children: [
@@ -589,7 +590,7 @@ class _GridCard extends StatelessWidget {
             children: [
               // Product Image
               Expanded(
-                flex: 3,
+                flex: isCompactKiosk(context) ? 1 : 3,
                 child: product.imageUrl != null
                     ? Stack(
                         fit: StackFit.expand,
@@ -639,7 +640,7 @@ class _GridCard extends StatelessWidget {
 
               // Product Info
               Expanded(
-                flex: 2,
+                flex: isCompactKiosk(context) ? 1 : 2,
                 child: Padding(
                   padding: const EdgeInsets.all(14),
                   child: Column(

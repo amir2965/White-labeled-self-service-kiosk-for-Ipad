@@ -7,6 +7,7 @@ import '../../providers/menu_provider.dart';
 import '../../providers/featured_display_provider.dart';
 import '../product_details_screen.dart';
 import '../widgets/kiosk_exit_button.dart';
+import '../widgets/kiosk_layout.dart';
 
 /// Template: Bento Highlights
 /// Bento-style top highlight tiles (1 large + 2 small) then a modern grid.
@@ -87,10 +88,11 @@ class _BentoHighlightsTemplateState
     final easedProgress = progress * progress * (3 - 2 * progress);
 
     // Calculate transforms
-    final highlightTranslateY = -280 * easedProgress; // Move up and out
-    final leftSlideOffset = -1.5 * easedProgress;
-    final rightSlideOffset = 1.5 * easedProgress;
-    final highlightOpacity = (1.0 - easedProgress).clamp(0.0, 1.0);
+    // Highlights move in lockstep with the grid so no empty band opens up
+    final highlightTranslateY = -_scrollOffset.clamp(0.0, 280.0);
+    final leftSlideOffset = -0.6 * easedProgress;
+    final rightSlideOffset = 0.6 * easedProgress;
+    final highlightOpacity = (1.0 - progress * progress).clamp(0.0, 1.0);
 
     return Column(
       children: [
@@ -185,16 +187,16 @@ class _BentoHighlightsTemplateState
                   controller: _scrollController,
                   padding: EdgeInsets.fromLTRB(
                     AppSpacing.lg,
-                    280, // Initial top padding for highlights space
+                    featured.isEmpty ? AppSpacing.lg : 280,
                     AppSpacing.lg,
                     AppSpacing.lg,
                   ),
                   itemCount: products.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
-                    childAspectRatio: 2.6,
+                    childAspectRatio: isCompactKiosk(context) ? 2.05 : 2.6,
                   ),
                   itemBuilder: (context, index) {
                     final product = products[index];
@@ -268,7 +270,7 @@ class _BentoHighlightsTemplateState
                                 bottomRight: Radius.circular(18),
                               ),
                               child: SizedBox(
-                                width: 150,
+                                width: isCompactKiosk(context) ? 110 : 150,
                                 child: ColoredBox(
                                   color: AppColors.gray300.withOpacity(0.5),
                                   child: product.imageUrl == null
@@ -304,7 +306,7 @@ class _BentoHighlightsTemplateState
               ),
 
               // Highlights positioned absolutely, transform based on scroll
-              if (highlightOpacity > 0.01)
+              if (featured.isNotEmpty && highlightOpacity > 0.01)
                 Positioned(
                   top: 0,
                   left: 0,

@@ -9,6 +9,7 @@ import '../../providers/menu_provider.dart';
 import '../../payments/checkout_screen.dart';
 import '../product_details_screen.dart';
 import '../widgets/kiosk_exit_button.dart';
+import '../widgets/kiosk_layout.dart';
 
 /// Template: Menu With Cart Sidebar
 /// 3-pane layout: categories (left) + product grid (center) + always-visible cart (right).
@@ -47,7 +48,7 @@ class _MenuWithCartSidebarTemplateState
         children: [
           // Left categories
           Container(
-            width: 220,
+            width: kioskCategoryRailWidth(context),
             decoration: BoxDecoration(
               color: AppColors.white,
               border: Border(
@@ -133,7 +134,7 @@ class _MenuWithCartSidebarTemplateState
                   : GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: _columnsForWidth(context),
-                        childAspectRatio: 1.55,
+                        childAspectRatio: isCompactKiosk(context) ? 1.4 : 1.55,
                         crossAxisSpacing: 16,
                         mainAxisSpacing: 16,
                       ),
@@ -166,7 +167,8 @@ class _MenuWithCartSidebarTemplateState
                                   style: AppTypography.bodyLarge.copyWith(
                                     fontWeight: FontWeight.w700,
                                   ),
-                                  maxLines: 3,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
 
                                 if (product.description.isNotEmpty) ...[
@@ -180,18 +182,18 @@ class _MenuWithCartSidebarTemplateState
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
-                                SizedBox(height: 8),
-                                Text(
-                                  '\$${product.price.toStringAsFixed(2)}',
-                                  style: AppTypography.h3.copyWith(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
                                 const Spacer(),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
+                                    Text(
+                                      '\$${product.price.toStringAsFixed(2)}',
+                                      style: AppTypography.h3.copyWith(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                                    const Spacer(),
                                     GestureDetector(
                                       onTap: () {
                                         ref
@@ -202,8 +204,8 @@ class _MenuWithCartSidebarTemplateState
                                             );
                                       },
                                       child: Container(
-                                        width: 48,
-                                        height: 48,
+                                        width: 44,
+                                        height: 44,
                                         decoration: BoxDecoration(
                                           color: AppColors.black,
                                           borderRadius: BorderRadius.circular(
@@ -231,7 +233,7 @@ class _MenuWithCartSidebarTemplateState
 
           // Right cart sidebar
           Container(
-            width: 360,
+            width: kioskCartWidth(context),
             decoration: BoxDecoration(
               color: AppColors.white,
               border: Border(

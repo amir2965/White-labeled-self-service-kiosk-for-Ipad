@@ -55,6 +55,7 @@ class CartState {
   double get subtotal => items.fold(0.0, (sum, item) => sum + item.totalPrice);
 
   double get serviceFee {
+    if (items.isEmpty) return 0.0;
     return (subtotal * serviceFeePercentage / 100) + serviceFeeFixed;
   }
 

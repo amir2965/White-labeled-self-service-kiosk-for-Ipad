@@ -5,6 +5,7 @@ import '../../../core/constants/app_spacing.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../payments/checkout_screen.dart';
 import '../../providers/cart_provider.dart';
+import '../widgets/kiosk_layout.dart';
 
 /// Reusable right-side cart/checkout sidebar.
 class CartSidebarPanel extends ConsumerWidget {
@@ -17,7 +18,7 @@ class CartSidebarPanel extends ConsumerWidget {
     final cartState = ref.watch(cartProvider);
 
     return Container(
-      width: width,
+      width: kioskCartWidth(context, width),
       decoration: BoxDecoration(
         color: AppColors.white,
         border: Border(left: BorderSide(color: AppColors.gray300, width: 1)),
