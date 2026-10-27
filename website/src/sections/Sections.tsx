@@ -796,7 +796,7 @@ export function State() {
 export function About() {
   return (
     <section id="about" className="section about" aria-labelledby="about-title">
-      <div className="wrap">
+      <div className="wrap about-grid">
         <div className="panel" data-reveal>
           <p className="eyebrow">07 / About the developer</p>
           <h2 id="about-title">Hi, I’m {site.firstName}.</h2>
@@ -837,6 +837,28 @@ export function About() {
             I wrote about the project on LinkedIn <Arrow />
           </a>
         </div>
+        <figure className="portrait" data-reveal>
+          <div className="portrait-frame">
+            <img
+              src={`${import.meta.env.BASE_URL}media/mahdi.jpg`}
+              alt={`Portrait of ${site.name}, seated, in front of a glass display cabinet`}
+              width={800}
+              height={1000}
+              loading="lazy"
+              decoding="async"
+            />
+            <span className="portrait-shade" aria-hidden="true" />
+            <figcaption>
+              <strong>{site.name}</strong>
+              <span>Bachelor of Cyber Security · Griffith University</span>
+              <span>Brisbane, Australia</span>
+            </figcaption>
+          </div>
+          <p className="portrait-status">
+            <i aria-hidden="true" />
+            Open to junior software engineering roles and internships
+          </p>
+        </figure>
       </div>
     </section>
   );

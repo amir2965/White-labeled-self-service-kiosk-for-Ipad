@@ -22,7 +22,7 @@ const AWAY = P({ x: 0.33, w: 0.6, rx: 0.015, ry: -0.015, vis: 0 });
 const MERCH = (screen: number, vis = 1) => P({ x: 0.46, y: 0, w: 0.42, rx: 0.06, ry: -0.35, screen, vis });
 // Decisions: iPad on the left, copy on the right.
 const DECISIONS = P({ x: -0.68, y: 0, w: 0.26, rx: 0.08, ry: 0.7, screen: 1 });
-const ABOUT = P({ x: 0.64, y: -0.08, w: 0.3, rx: 0.06, ry: -0.4, screen: 6 });
+const ABOUT = P({ x: 0.64, y: -0.08, w: 0.3, rx: 0.06, ry: -0.4, screen: 6, vis: 0 });
 // Between far-apart poses the iPad shrinks away and reappears, so it never slides behind text panels.
 const MERCH_HIDDEN = MERCH(6, 0);
 const DECISIONS_HIDDEN = { ...DECISIONS, vis: 0 };
