@@ -7,16 +7,22 @@ An interactive 3D showcase for the self-service kiosk in the repo root. Scroll t
 | | |
 |---|---|
 | 3D iPad | Procedural three.js geometry (no downloaded model, so no asset licences). Screen textures are real screenshots of the Flutter app. |
-| Demo kiosk | A **web re-creation** of the Flutter app's ordering flow in React (same sample menu, modifiers and the 2.5% + $0.30 service fee). It is *not* the Flutter app itself. |
+| Demo kiosk | The real Flutter web build, embedded from `/app`. On phones it loads only when the visitor launches an experience. |
 | Payment | **Simulated.** The QR code is real but encodes a demo string; a button stands in for the customer's phone. Nothing is charged or sent anywhere. |
 
-Why not embed the Flutter web build? It needs a ~MB-scale CanvasKit download, would not render as a live texture inside the 3D scene, and the QR flow depends on the local Dart server. A lightweight re-creation gives a faster, more reliable demo.
+The Flutter demo includes its CanvasKit runtime. It is loaded independently of the showcase, so browsing the mobile page does not download or initialise the app.
 
 ## Stack
 
 React 18 · TypeScript · Vite · three.js · React Three Fiber · drei · qrcode-generator · Inter (self-hosted via Fontsource). No animation library: scroll choreography is a small custom rig (`src/scene/poses.ts`).
 
 ## Run locally
+
+Build the embedded demo from the repository root first (also required after changes to Dart):
+
+```bash
+flutter build web --release -t lib/main_demo.dart -o website/public/app
+```
 
 ```bash
 cd website
@@ -32,11 +38,15 @@ Personal links live in [`src/site.config.ts`](src/site.config.ts). Set `email` t
 
 ## Performance and accessibility
 
-- The 3D scene is code-split and loads after first paint (~17 KB gzipped initial JS).
-- Pixel ratio is capped (1.75 desktop / 1.5 mobile); lighting is built in-scene, with no HDR downloads.
+- The 3D scene is dynamically imported on desktop. Mobile does not download or initialise WebGL, and has no scroll rig or pointer tracking.
+- Desktop pixel ratio is capped at 1.75; lighting is built in-scene, with no HDR downloads.
 - `prefers-reduced-motion` or no WebGL: the 3D stage is skipped, a static screenshot is shown and the demo renders inline.
-- Phones: 3D iPad in the hero and "take it apart" sections; the demo is rendered inline and scaled (best in landscape).
-- The demo is real DOM: keyboard-focusable buttons, focus rings, skip link, semantic headings.
+- Phones: text-first hero, lightweight device artwork, compact chapter layouts, full navigation in a native modal, and an on-demand full-screen app workspace. Touch landscape layouts remain mobile through 1100px when the viewport is short.
+- Ordering adapts to phone width. Merchant tools preserve a readable tablet canvas with internal horizontal/vertical scrolling; landscape provides more room.
+- The showcase uses semantic HTML, keyboard-focusable controls, visible focus rings, native dialog focus containment, safe-area padding, and reduced-motion support. The embedded Flutter app has its own accessibility behavior.
+- Screenshots use responsive WebP assets with intrinsic dimensions and lazy loading below the hero. The self-hosted font uses a single Latin variable font with `font-display: swap`.
+
+See [MOBILE-QA.md](MOBILE-QA.md) for verification results and limitations. Mobile styling is isolated in `src/mobile.css`; desktop scene choreography remains in `src/scene/`.
 
 ## Deploy (free): GitHub Pages
 

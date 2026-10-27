@@ -2,6 +2,8 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import FlutterDemo, { FLOWS, type FlowId } from '../kiosk/FlutterDemo';
 import { MILKS, PRODUCTS, SIZES, money, serviceFee } from '../kiosk/data';
 import { site } from '../site.config';
+import MobileDemo from '../kiosk/MobileDemo';
+import ScreenImage from '../ScreenImage';
 
 const Arrow = () => <span aria-hidden="true">↗</span>;
 const shot = (name: string) => `${import.meta.env.BASE_URL}screens/${name}.png`;
@@ -12,19 +14,19 @@ const Badge = ({ tone, children }: { tone: Tone; children: ReactNode }) => <em c
 
 /* ------------------------------------------------------------------ Hero */
 
-export function Hero({ fallback }: { fallback: boolean }) {
+export function Hero({ fallback, mobile }: { fallback: boolean; mobile: boolean }) {
   return (
     <section id="hero" className="section hero" aria-labelledby="hero-title">
-      {fallback && <img className="hero-static" src={shot('12-kiosk-welcome')} alt="The kiosk welcome screen on an iPad" />}
+      {fallback && !mobile && <img className="hero-static" src={shot('12-kiosk-welcome')} alt="The kiosk welcome screen on an iPad" />}
       <div className="wrap">
         <p className="eyebrow" data-reveal>Independent software project · Flutter / Dart</p>
         <h1 id="hero-title" data-reveal>
           One kiosk.<br />Different<br /><em>businesses.</em>
         </h1>
         <p className="lede" data-reveal>
-          A configurable self-service ordering experience built with Flutter. I designed and developed it to explore how a
+          <span className="hero-summary">A configurable self-service ordering experience built with Flutter.</span>{' '}<span className="hero-context">I designed and developed it to explore how a
           single tablet application could support different restaurants and cafés without a completely different interface
-          for each business.
+          for each business.</span>
         </p>
         <p className="lede sub" data-reveal>
           It brings together a customer ordering experience, merchant configuration tools and a simulated QR payment workflow.
@@ -35,6 +37,13 @@ export function Hero({ fallback }: { fallback: boolean }) {
             View source code <Arrow />
           </a>
         </div>
+        {mobile && (
+          <figure className="hero-device">
+            <div className="hero-device-bar"><span /><span>Made for the way you order</span><span>01 / 04</span></div>
+            <img src={`${import.meta.env.BASE_URL}screens/12-kiosk-welcome-640.webp`} srcSet={`${import.meta.env.BASE_URL}screens/12-kiosk-welcome-640.webp 640w, ${import.meta.env.BASE_URL}screens/12-kiosk-welcome-1024.webp 1024w`} sizes="(max-width: 600px) 90vw, 560px" width={1024} height={712} fetchPriority="high" alt="Demo Café kiosk: fresh coffee, no queue. Start order." />
+            <figcaption><span><i />One app. Your identity.</span><span>Flutter / Dart</span></figcaption>
+          </figure>
+        )}
         <ul className="status-strip" data-reveal aria-label="Project status">
           <li>Independent prototype</li>
           <li>Browser-tested at tablet dimensions</li>
@@ -49,7 +58,7 @@ export function Hero({ fallback }: { fallback: boolean }) {
 /* ---------------------------------------------------------- Statement */
 
 /** Full-width cinematic band: a muted looping clip that only plays while it is on screen. */
-export function Statement({ reduced }: { reduced: boolean }) {
+export function Statement({ reduced, mobile }: { reduced: boolean; mobile: boolean }) {
   const ref = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     const v = ref.current;
@@ -62,7 +71,7 @@ export function Statement({ reduced }: { reduced: boolean }) {
   return (
     <section id="statement" className="section statement" aria-labelledby="statement-title">
       <div className="statement-media">
-        <video
+        {mobile ? <img className="statement-poster" src={`${base}media/white-label-poster-640.webp`} srcSet={`${base}media/white-label-poster-640.webp 640w, ${base}media/white-label-poster-1024.webp 1024w`} sizes="100vw" width={1280} height={720} alt="The same kiosk design presented in different brand identities" loading="lazy" decoding="async" /> : <video
           ref={ref}
           muted
           loop
@@ -73,7 +82,7 @@ export function Statement({ reduced }: { reduced: boolean }) {
           tabIndex={-1}
         >
           {!reduced && <source src={`${base}media/white-label.mp4`} type="video/mp4" />}
-        </video>
+        </video>}
       </div>
       <div className="wrap statement-copy" data-reveal>
         <div className="panel-in">
@@ -226,14 +235,14 @@ export function Product({ inline }: { inline: boolean }) {
     if (i === 0) {
       return (
         <VizShell n="01" title="Start an order" path="Start screen · web demo of the kiosk">
-          <img className="solo" src={shot('12-kiosk-welcome')} alt="Kiosk start screen: outdoor restaurant terrace background, café logo, title and Start order button" />
+          <ScreenImage className="solo" name="12-kiosk-welcome" alt="Kiosk start screen: outdoor restaurant terrace background, café logo, title and Start order button" />
         </VizShell>
       );
     }
     if (i === 1) {
       return (
         <VizShell n="02" title="Explore the menu" path="Screenshot · Flutter app, landscape tablet">
-          <img className="solo" src={shot('13-kiosk-menu')} alt="Kiosk menu screen with category rail and product cards" />
+          <ScreenImage className="solo" name="13-kiosk-menu" alt="Kiosk menu screen with category rail and product cards" />
         </VizShell>
       );
     }
@@ -241,7 +250,7 @@ export function Product({ inline }: { inline: boolean }) {
       return (
         <VizShell n="03" title="Make it yours" path="Try it · the same size and milk options as the demo">
           <div className="opt-item">
-            <img src={LATTE.img} alt="" />
+            <img src={`${import.meta.env.BASE_URL}menu/latte-thumb.webp`} alt="" width={64} height={64} loading="lazy" decoding="async" />
             <div>
               <strong>{LATTE.name}</strong>
               <small>{LATTE.desc}</small>
@@ -348,9 +357,11 @@ interface DemoProps {
   onFlow: (f: FlowId) => void;
   onRestart: () => void;
   inline: boolean;
+  mobile?: boolean;
 }
 
-export function Demo({ flow, nonce, engaged, onEngage, onFlow, onRestart, inline }: DemoProps) {
+export function Demo({ flow, nonce, engaged, onEngage, onFlow, onRestart, inline, mobile }: DemoProps) {
+  if (mobile) return <MobileDemo flow={flow} nonce={nonce} onFlow={onFlow} onRestart={onRestart} />;
   const cur = FLOWS.find((f) => f.id === flow)!;
   const hint = (
     <button type="button" className={`demo-hint${engaged ? ' on' : ''}`} onClick={() => onEngage(false)} disabled={!engaged}>
@@ -480,7 +491,7 @@ export function Merchant({ inline }: { inline: boolean }) {
           ? (i) => (
               <div className="shots">
                 {MERCHANT_SHOTS[i].map(([name, alt]) => (
-                  <img key={name} className={MERCHANT_SHOTS[i].length === 1 ? 'main' : ''} src={shot(name)} alt={alt} />
+                  <ScreenImage key={name} className={MERCHANT_SHOTS[i].length === 1 ? 'main' : ''} name={name} alt={alt} />
                 ))}
               </div>
             )
@@ -648,9 +659,9 @@ function EngineeringViz({ id }: { id: number }) {
   return (
     <VizShell n="D" title="Merchant and reporting interfaces" path="go_router · fl_chart · CSV/PDF export">
       <div className="shots">
-        <img className="main" src={shot('07-analytics')} alt="Sales analytics dashboard" />
-        <img src={shot('03-template-gallery')} alt="Menu template gallery" />
-        <img src={shot('09-branding-typography')} alt="Branding editor with typography selection" />
+        <ScreenImage className="main" name="07-analytics" alt="Sales analytics dashboard" />
+        <ScreenImage name="03-template-gallery" alt="Menu template gallery" />
+        <ScreenImage name="09-branding-typography" alt="Branding editor with typography selection" />
       </div>
     </VizShell>
   );

@@ -67,6 +67,7 @@ interface Props {
   nonce: number;
   engaged: boolean;
   onEngage: (on: boolean) => void;
+  releaseOnPointerLeave?: boolean;
 }
 
 /**
@@ -74,10 +75,11 @@ interface Props {
  * Until the visitor clicks it, the page scrolls normally over the device; after a click the app takes the
  * wheel and touch input, and Esc, the "Done" pill or leaving the device hands scrolling back.
  */
-export default function FlutterDemo({ flow, nonce, engaged, onEngage }: Props) {
+export default function FlutterDemo({ flow, nonce, engaged, onEngage, releaseOnPointerLeave = true }: Props) {
   const frame = useRef<HTMLIFrameElement>(null);
   const [armed, setArmed] = useState(false);
   const [ready, setReady] = useState(false);
+  const [slow, setSlow] = useState(false);
   const cur = FLOWS.find((f) => f.id === flow)!;
 
   // The Flutter bundle is a few MB: only start loading when the visitor nears the demo.
@@ -97,11 +99,16 @@ export default function FlutterDemo({ flow, nonce, engaged, onEngage }: Props) {
     return () => io.disconnect();
   }, []);
 
-  useEffect(() => setReady(false), [flow, nonce]);
+  useEffect(() => { setReady(false); setSlow(false); }, [flow, nonce]);
+  useEffect(() => {
+    if (!armed || ready) return;
+    const timer = window.setTimeout(() => setSlow(true), 20000);
+    return () => window.clearTimeout(timer);
+  }, [armed, ready, flow, nonce]);
 
   useEffect(() => {
     const on = (e: MessageEvent) => {
-      if (e.source !== frame.current?.contentWindow) return;
+      if (e.source !== frame.current?.contentWindow || e.origin !== window.location.origin) return;
       if (e.data?.type === 'kiosk-demo-ready') setReady(true);
       if (e.data?.type === 'kiosk-demo-release') onEngage(false);
     };
@@ -116,7 +123,7 @@ export default function FlutterDemo({ flow, nonce, engaged, onEngage }: Props) {
   return (
     <div
       className={`flutter-demo${engaged ? ' engaged' : ''}`}
-      onPointerLeave={(e) => e.pointerType === 'mouse' && engaged && onEngage(false)}
+      onPointerLeave={(e) => releaseOnPointerLeave && e.pointerType === 'mouse' && engaged && onEngage(false)}
     >
       {armed && (
         <iframe
@@ -138,7 +145,8 @@ export default function FlutterDemo({ flow, nonce, engaged, onEngage }: Props) {
       )}
       <div className={`flutter-loading${ready ? ' done' : ''}`} aria-hidden={ready}>
         <i />
-        <span>Loading the Flutter app</span>
+        <span role="status">{slow ? 'The app is taking longer to load.' : 'Loading the Flutter app'}</span>
+        {slow && <a href={appUrl(cur, nonce)} target="_blank" rel="noreferrer">Open the demo in a new tab ↗</a>}
       </div>
     </div>
   );

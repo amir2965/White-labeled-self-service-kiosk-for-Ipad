@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type RefObject } from 'react';
 import { rig } from './scene/state';
 import { SECTION_IDS } from './scene/poses';
 
@@ -26,9 +26,14 @@ export function hasWebGL() {
 const clamp = (n: number, a: number, b: number) => Math.min(b, Math.max(a, n));
 
 /** Maps page scroll to (section index, progress in section) for the 3D rig, and tracks the pointer. */
-export function useScrollRig(onDemoActive: (active: boolean) => void) {
+export function useScrollRig(onDemoActive: (active: boolean) => void, enabled: boolean) {
   const last = useRef(false);
   useEffect(() => {
+    if (!enabled) {
+      document.documentElement.style.removeProperty('--progress');
+      document.documentElement.style.removeProperty('--glow');
+      return;
+    }
     const els = SECTION_IDS.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
     let raf = 0;
     const update = () => {
@@ -68,7 +73,41 @@ export function useScrollRig(onDemoActive: (active: boolean) => void) {
       window.removeEventListener('pointermove', onPointer);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [onDemoActive]);
+  }, [onDemoActive, enabled]);
+}
+
+/** Native dialogs supply focus containment, inert background and Escape handling. */
+export function useModal(ref: RefObject<HTMLDialogElement>, open: boolean, onClose: () => void) {
+  const close = useRef(onClose);
+  close.current = onClose;
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !open) return;
+    const previous = document.activeElement as HTMLElement | null;
+    const overflow = document.body.style.overflow;
+    el.showModal();
+    document.body.style.overflow = 'hidden';
+    const cancel = (e: Event) => { e.preventDefault(); close.current(); };
+    const containFocus = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+      const focusable = [...el.querySelectorAll<HTMLElement>('a[href], button:not(:disabled), select, input, textarea, iframe, [tabindex]:not([tabindex="-1"])')]
+        .filter((node) => node.tabIndex >= 0 && node.getClientRects().length > 0);
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (!first) { e.preventDefault(); return; }
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
+    el.addEventListener('cancel', cancel);
+    el.addEventListener('keydown', containFocus);
+    return () => {
+      el.removeEventListener('cancel', cancel);
+      el.removeEventListener('keydown', containFocus);
+      el.close();
+      document.body.style.overflow = overflow;
+      previous?.focus({ preventScroll: true });
+    };
+  }, [open, ref]);
 }
 
 /** Adds .in to [data-reveal] elements as they enter the viewport. */

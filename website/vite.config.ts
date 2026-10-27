@@ -7,13 +7,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     chunkSizeWarningLimit: 1200,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          three: ['three'],
-          r3f: ['@react-three/fiber', '@react-three/drei'],
-        },
-      },
-    },
+    // Let the dynamic Scene import own its dependency graph. Manual 3D chunks
+    // pulled shared React dependencies into the initial mobile preload graph.
   },
 });

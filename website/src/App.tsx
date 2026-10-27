@@ -3,14 +3,15 @@ import FlutterDemo, { type FlowId } from './kiosk/FlutterDemo';
 import { About, Decisions, Demo, Engineering, Hero, Merchant, Product, State, Statement } from './sections/Sections';
 import { hasWebGL, useMedia, useReveal, useScrollRig } from './hooks';
 import { site } from './site.config';
+import Navigation from './Navigation';
 
 const Scene = lazy(() => import('./scene/Scene'));
 
 export default function App() {
-  const mobile = useMedia('(max-width: 820px)');
+  const mobile = useMedia('(max-width: 820px), (max-width: 1100px) and (max-height: 520px) and (pointer: coarse)');
   const reduced = useMedia('(prefers-reduced-motion: reduce)');
-  const webgl = useMemo(hasWebGL, []);
-  const use3d = webgl && !reduced;
+  const webgl = useMemo(() => !mobile && !reduced && hasWebGL(), [mobile, reduced]);
+  const use3d = webgl && !reduced && !mobile;
   const inlineDemo = mobile || !use3d;
 
   const [flow, setFlow] = useState<FlowId>('order');
@@ -32,28 +33,14 @@ export default function App() {
     if (!a) setEngaged(false);
   }, []);
 
-  useScrollRig(onDemoActive);
+  useScrollRig(onDemoActive, use3d);
   useReveal();
 
   return (
     <>
       <a className="skip" href="#demo">Skip to the demo</a>
       <div className="progress" aria-hidden="true" />
-      <header className="nav">
-        <a className="mark" href="#hero" aria-label="Back to top">
-          <i aria-hidden="true" />
-          Self-Service Kiosk
-        </a>
-        <nav aria-label="Primary">
-          <a href="#product">Product</a>
-          <a href="#demo">Demo</a>
-          <a href="#merchant">Merchant</a>
-          <a href="#engineering">Engineering</a>
-          <a href="#state">Current state</a>
-          <a href="#about">About</a>
-          <a href={site.github} target="_blank" rel="noreferrer">GitHub ↗</a>
-        </nav>
-      </header>
+      <Navigation compact={mobile} />
 
       <div className="stage">
         {use3d && (
@@ -70,10 +57,10 @@ export default function App() {
       </div>
 
       <main>
-        <Hero fallback={!use3d} />
-        <Statement reduced={reduced} />
+        <Hero fallback={!use3d} mobile={mobile} />
+        <Statement reduced={reduced || mobile} mobile={mobile} />
         <Product inline={mobile} />
-        <Demo flow={flow} nonce={nonce} engaged={engaged} onEngage={onEngage} onFlow={onFlow} onRestart={onRestart} inline={inlineDemo} />
+        <Demo flow={flow} nonce={nonce} engaged={engaged} onEngage={onEngage} onFlow={onFlow} onRestart={onRestart} inline={inlineDemo} mobile={mobile} />
         <Merchant inline={inlineDemo} />
         <Engineering inline={mobile} />
         <Decisions />
