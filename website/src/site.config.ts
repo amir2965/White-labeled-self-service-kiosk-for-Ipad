@@ -4,8 +4,8 @@ export const site = {
   firstName: 'Mahdi',
   role: 'Software engineer',
   location: 'Australia',
-  github: 'https://github.com/amir2965/White-labeled-self-service-kiosk-for-Ipad',
-  githubProfile: 'https://github.com/amir2965',
+  github: 'https://github.com/tabseen/White-labeled-self-service-kiosk-for-Ipad',
+  githubProfile: 'https://github.com/tabseen',
   // Verify this slug matches your profile URL before publishing.
   linkedinProfile: 'https://www.linkedin.com/in/amirmahdi-sarikhanifard',
   linkedinPost: 'https://lnkd.in/p/gej2HySb',
