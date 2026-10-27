@@ -300,13 +300,27 @@ function ScaledStage({ children }: { children: ReactNode }) {
 interface DemoProps {
   flow: FlowId;
   nonce: number;
+  engaged: boolean;
+  onEngage: (on: boolean) => void;
   onFlow: (f: FlowId) => void;
   onRestart: () => void;
   inline: boolean;
 }
 
-export function Demo({ flow, nonce, onFlow, onRestart, inline }: DemoProps) {
+export function Demo({ flow, nonce, engaged, onEngage, onFlow, onRestart, inline }: DemoProps) {
   const cur = FLOWS.find((f) => f.id === flow)!;
+  const hint = (
+    <button type="button" className={`demo-hint${engaged ? ' on' : ''}`} onClick={() => onEngage(false)} disabled={!engaged}>
+      <i aria-hidden="true" />
+      {engaged ? (
+        <>
+          Interacting · <b>Done</b> or press <kbd>Esc</kbd> to scroll the page
+        </>
+      ) : (
+        'Real Flutter app · sample data · scroll freely, click the screen to interact'
+      )}
+    </button>
+  );
   return (
     <section id="demo" className="section demo" aria-labelledby="demo-title">
       <div className="demo-sticky">
@@ -314,15 +328,14 @@ export function Demo({ flow, nonce, onFlow, onRestart, inline }: DemoProps) {
           <p className="eyebrow">02 / Interactive demo</p>
           <h2 id="demo-title">Give it a try.</h2>
           <p className="lede">
-            This is the Flutter app itself, built for the web. Pick an experience to explore
-            {inline ? ' (best in landscape or on a bigger screen).' : ', then use it inside the 3D iPad.'}
+            This is the Flutter app itself, built for the web. Pick an experience, then click the screen to use it.
           </p>
           <div className="flows" role="group" aria-label="Choose an experience">
             {FLOWS.map((f, i) => (
               <button
                 type="button"
                 key={f.id}
-                className={`flow${f.id === flow ? ' on' : ''}`}
+                className={`pick${f.id === flow ? ' on' : ''}`}
                 aria-pressed={f.id === flow}
                 onClick={() => onFlow(f.id)}
               >
@@ -330,6 +343,11 @@ export function Demo({ flow, nonce, onFlow, onRestart, inline }: DemoProps) {
                 <span className="t">
                   <strong>{f.title}</strong>
                   <small>{f.blurb}</small>
+                  <ol className="try" aria-label="Things to try">
+                    {f.tryIt.map((s) => (
+                      <li key={s}>{s}</li>
+                    ))}
+                  </ol>
                 </span>
               </button>
             ))}
@@ -347,15 +365,12 @@ export function Demo({ flow, nonce, onFlow, onRestart, inline }: DemoProps) {
         {inline && (
           <div className="inline-device">
             <ScaledStage>
-              <FlutterDemo flow={flow} nonce={nonce} />
+              <FlutterDemo flow={flow} nonce={nonce} engaged={engaged} onEngage={onEngage} />
             </ScaledStage>
+            {hint}
           </div>
         )}
-        {!inline && (
-          <p className="demo-badge" aria-hidden="true">
-            <i />Real Flutter app · sample data · payment simulated
-          </p>
-        )}
+        {!inline && <div className="demo-hint-wrap">{hint}</div>}
       </div>
     </section>
   );

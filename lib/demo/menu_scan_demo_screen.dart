@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_spacing.dart';
 import '../core/constants/app_typography.dart';
-import '../core/widgets/app_button.dart';
 import '../presentation/kiosk/menu_template_config.dart';
 import '../presentation/providers/cart_provider.dart';
 import '../presentation/providers/menu_provider.dart';
@@ -95,6 +94,15 @@ class _MenuScanDemoScreenState extends ConsumerState<MenuScanDemoScreen>
   _Phase _phase = _Phase.idle;
 
   @override
+  void initState() {
+    super.initState();
+    // The scan starts by itself so the demo needs no extra tap
+    Future.delayed(const Duration(milliseconds: 1100), () {
+      if (mounted && _phase == _Phase.idle) _start();
+    });
+  }
+
+  @override
   void dispose() {
     _scan.dispose();
     _listController.dispose();
@@ -104,12 +112,6 @@ class _MenuScanDemoScreenState extends ConsumerState<MenuScanDemoScreen>
   void _start() {
     setState(() => _phase = _Phase.scanning);
     _scan.forward(from: 0);
-  }
-
-  void _reset() {
-    _scan.stop();
-    _scan.value = 0;
-    setState(() => _phase = _Phase.idle);
   }
 
   ({int column, double y}) _beam(double p) {
@@ -523,7 +525,7 @@ class _MenuScanDemoScreenState extends ConsumerState<MenuScanDemoScreen>
                   .copyWith(fontWeight: FontWeight.w600)),
           const SizedBox(height: 6),
           Text(
-            'Names, prices, categories and size options are read from the photo, ready to review.',
+            'Names, prices, categories and size options are read from the photo.',
             textAlign: TextAlign.center,
             style:
                 AppTypography.bodySmall.copyWith(color: AppColors.gray600),
@@ -557,92 +559,117 @@ class _MenuScanDemoScreenState extends ConsumerState<MenuScanDemoScreen>
   Widget _actions() {
     switch (_phase) {
       case _Phase.idle:
-        return AppButton(
-          label: 'Scan menu photo',
-          icon: Icons.document_scanner_outlined,
-          size: AppButtonSize.large,
-          fullWidth: true,
-          onPressed: _start,
-        );
       case _Phase.scanning:
-        return const AppButton(
-          label: 'Reading menu…',
-          size: AppButtonSize.large,
-          fullWidth: true,
-          isLoading: true,
-          onPressed: null,
+        return _statusPill(
+          _phase == _Phase.idle ? 'Preparing scan…' : 'Reading the menu…',
         );
       case _Phase.review:
-        return Row(
-          children: [
-            Expanded(
-              child: AppButton(
-                label: 'Scan again',
-                variant: AppButtonVariant.outline,
-                size: AppButtonSize.large,
-                fullWidth: true,
-                onPressed: _reset,
-              ),
-            ),
-            const SizedBox(width: AppSpacing.sm),
-            Expanded(
-              flex: 2,
-              child: AppButton(
-                label: 'Import ${_items.length} items',
-                icon: Icons.check,
-                size: AppButtonSize.large,
-                fullWidth: true,
-                onPressed: _import,
-              ),
-            ),
-          ],
+        return _primaryButton(
+          label: 'Import ${_items.length} items',
+          icon: Icons.download_done_rounded,
+          onTap: _import,
         );
       case _Phase.imported:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              children: [
-                const Icon(Icons.check_circle,
-                    color: AppColors.success, size: 20),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    '${_items.length} items in 4 categories added to the menu',
-                    style: AppTypography.bodySmall
-                        .copyWith(fontWeight: FontWeight.w600),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                children: [
+                  const Icon(Icons.check_circle,
+                      color: AppColors.success, size: 18),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      '${_items.length} items in 4 categories added to the menu',
+                      style: AppTypography.bodySmall
+                          .copyWith(fontWeight: FontWeight.w600),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-            const SizedBox(height: AppSpacing.sm),
-            Row(
-              children: [
-                Expanded(
-                  child: AppButton(
-                    label: 'Rescan',
-                    variant: AppButtonVariant.outline,
-                    size: AppButtonSize.large,
-                    fullWidth: true,
-                    onPressed: _reset,
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.sm),
-                Expanded(
-                  flex: 2,
-                  child: AppButton(
-                    label: 'Open in kiosk',
-                    icon: Icons.arrow_forward,
-                    size: AppButtonSize.large,
-                    fullWidth: true,
-                    onPressed: _openKiosk,
-                  ),
-                ),
-              ],
+            _primaryButton(
+              label: 'Open in kiosk',
+              icon: Icons.arrow_forward_rounded,
+              onTap: _openKiosk,
             ),
           ],
         );
     }
+  }
+
+  Widget _statusPill(String text) {
+    return Container(
+      height: 52,
+      decoration: BoxDecoration(
+        color: AppColors.gray50,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.gray200),
+      ),
+      alignment: Alignment.center,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(
+            width: 16,
+            height: 16,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: AppColors.blue,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Text(text,
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.gray700,
+                fontWeight: FontWeight.w500,
+              )),
+        ],
+      ),
+    );
+  }
+
+  Widget _primaryButton({
+    required String label,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return SizedBox(
+      height: 52,
+      child: FilledButton(
+        onPressed: onTap,
+        style: FilledButton.styleFrom(
+          backgroundColor: AppColors.blue,
+          foregroundColor: AppColors.white,
+          elevation: 0,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.bodyLarge.copyWith(
+                  color: AppColors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Icon(icon, size: 20),
+          ],
+        ),
+      ),
+    );
   }
 
   BoxDecoration _cardDecoration() => BoxDecoration(

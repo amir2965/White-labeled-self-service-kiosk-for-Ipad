@@ -35,6 +35,10 @@
       if (b) b.remove();
       if (window.parent !== window) window.parent.postMessage({ type: 'kiosk-demo-ready' }, '*');
     });
+    // Esc hands scrolling back to the embedding page.
+    window.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && window.parent !== window) window.parent.postMessage({ type: 'kiosk-demo-release' }, '*');
+    }, true);
   </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>

@@ -6,6 +6,7 @@ import 'dart:async';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/constants/app_typography.dart';
+import '../../demo/demo_config.dart';
 import 'analytics_provider.dart';
 import 'analytics_state.dart';
 import 'theme_provider.dart';
@@ -792,17 +793,18 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
       ),
       child: Row(
         children: [
-          // Luxury back button
-          LuxuryBackButton(
-            onPressed: () {
-              context.go('/analytics/sales');
-            },
-            isDarkMode: isDarkMode,
-            showLabel: true,
-            label: 'Sales Overview',
-          ),
-
-          const SizedBox(width: 20),
+          // Luxury back button (hidden in the web demo)
+          if (!DemoConfig.enabled) ...[
+            LuxuryBackButton(
+              onPressed: () {
+                context.go('/analytics/sales');
+              },
+              isDarkMode: isDarkMode,
+              showLabel: true,
+              label: 'Sales Overview',
+            ),
+            const SizedBox(width: 20),
+          ],
 
           // Section title
           Expanded(
@@ -842,6 +844,8 @@ class _AnalyticsPageState extends ConsumerState<AnalyticsPage> {
       right: 24,
       child: DashboardSlideAccess(
         onUnlocked: () {
+          // The web demo has no merchant dashboard, so the shortcut stays inert
+          if (DemoConfig.enabled) return;
           // Navigate to dashboard when slide-and-hold completes
           context.go('/dashboard');
         },

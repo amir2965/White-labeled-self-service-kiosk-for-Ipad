@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import 'kiosk_pin_screen.dart';
+import '../../../demo/demo_config.dart';
 
 /// Reusable hidden exit button for kiosk templates
 /// Shows a 3-dot menu icon that requires 5 quick taps to trigger PIN screen
@@ -63,7 +64,7 @@ class _KioskExitButtonState extends State<KioskExitButton> {
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.isVisible) {
+    if (!widget.isVisible || DemoConfig.enabled) {
       return const SizedBox.shrink();
     }
 

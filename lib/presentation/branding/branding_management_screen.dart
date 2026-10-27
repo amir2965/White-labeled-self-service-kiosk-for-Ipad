@@ -15,6 +15,7 @@ import 'widgets/font_selector.dart';
 import 'widgets/confirmation_dialog.dart';
 import 'widgets/custom_font_manager.dart';
 import 'widgets/image_management_widget.dart';
+import '../../demo/demo_config.dart';
 
 /// Branding management screen - Configure kiosk welcome page and branding
 class BrandingManagementScreen extends ConsumerStatefulWidget {
@@ -70,23 +71,29 @@ class _BrandingManagementScreenState
       appBar: AppBar(
         elevation: 0,
         backgroundColor: isDarkMode ? const Color(0xFF2A2A2A) : AppColors.white,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: isDarkMode ? Colors.white : AppColors.black,
-          ),
-          onPressed: () async {
-            if (_hasUnsavedChanges) {
-              final shouldLeave =
-                  await ConfirmationDialog.showDiscardConfirmation(context);
-              if (shouldLeave && context.mounted) {
-                context.go('/dashboard');
-              }
-            } else {
-              context.go('/dashboard');
-            }
-          },
-        ),
+        leading: DemoConfig.enabled
+            ? const SizedBox.shrink()
+            : IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: isDarkMode ? Colors.white : AppColors.black,
+                ),
+                onPressed: () async {
+                  if (_hasUnsavedChanges) {
+                    final shouldLeave =
+                        await ConfirmationDialog.showDiscardConfirmation(
+                          context,
+                        );
+                    if (shouldLeave && context.mounted) {
+                      context.go('/dashboard');
+                    }
+                  } else {
+                    context.go('/dashboard');
+                  }
+                },
+              ),
+        automaticallyImplyLeading: false,
+        leadingWidth: DemoConfig.enabled ? 24 : null,
         title: Text(
           'Branding & Welcome Page',
           style: AppTypography.h2.copyWith(

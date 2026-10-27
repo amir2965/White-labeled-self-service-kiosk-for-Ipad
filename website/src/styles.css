@@ -139,23 +139,41 @@ h3 { font-size: 1.25rem; letter-spacing: -0.02em; font-weight: 600; }
 .demo-panel h2 { font-size: clamp(2rem, 3.2vw, 3rem); }
 .demo-panel .lede { font-size: 0.95rem; margin-top: 12px; }
 .flows { display: grid; gap: 4px; margin: 20px 0 0; }
-.flow { appearance: none; font: inherit; color: var(--ink); text-align: left; cursor: pointer; display: flex; gap: 12px; padding: 9px 10px; border-radius: 14px; border: 1px solid transparent; background: transparent; opacity: 0.6; transition: opacity 0.25s, background 0.25s, border-color 0.25s, transform 0.25s var(--ease); }
-.flow:hover { opacity: 1; background: rgba(255, 255, 255, 0.04); }
-.flow.on { opacity: 1; background: rgba(91, 157, 255, 0.12); border-color: rgba(91, 157, 255, 0.4); }
-.flow .n { flex: none; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font-size: 11px; margin-top: 1px; }
-.flow.on .n { background: var(--accent); border-color: var(--accent); color: #05070a; font-weight: 700; }
-.flow strong { font-size: 14px; font-weight: 600; display: block; }
-.flow small { color: var(--mute); font-size: 12px; line-height: 1.4; display: none; margin-top: 2px; }
-.flow.on small { display: block; }
+.pick { appearance: none; font: inherit; color: var(--ink); text-align: left; cursor: pointer; display: flex; gap: 12px; padding: 9px 10px; border-radius: 14px; border: 1px solid transparent; background: transparent; opacity: 0.6; transition: opacity 0.25s, background 0.25s, border-color 0.25s; }
+.pick:hover { opacity: 1; background: rgba(255, 255, 255, 0.04); }
+.pick.on { opacity: 1; background: rgba(91, 157, 255, 0.12); border-color: rgba(91, 157, 255, 0.4); }
+.pick .n { flex: none; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font-size: 11px; margin-top: 1px; }
+.pick.on .n { background: var(--accent); border-color: var(--accent); color: #05070a; font-weight: 700; }
+.pick strong { font-size: 14px; font-weight: 600; display: block; }
+.pick small { color: var(--mute); font-size: 12px; line-height: 1.4; display: none; margin-top: 2px; }
+.pick.on small { display: block; }
+.try { display: none; list-style: none; margin: 8px 0 0; padding: 0; flex-wrap: wrap; gap: 4px 0; counter-reset: t; }
+.pick.on .try { display: flex; }
+.try li { counter-increment: t; font-size: 11px; color: #b9c3d4; }
+.try li + li::before { content: '→'; margin: 0 6px; color: var(--accent); }
 .flow-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; }
 .restart { appearance: none; font: inherit; font-size: 12px; color: var(--mute); background: rgba(255, 255, 255, 0.04); border: 1px solid var(--line); border-radius: 999px; padding: 5px 14px; cursor: pointer; transition: color 0.2s, border-color 0.2s; }
 .restart:hover { color: var(--ink); border-color: rgba(255, 255, 255, 0.3); }
-.flutter-demo { position: relative; width: 100%; height: 100%; background: #fff; overflow: hidden; border-radius: 18px; }
+.flutter-demo { position: relative; width: 100%; height: 100%; background: #fff; overflow: hidden; border-radius: 18px; transition: box-shadow 0.3s var(--ease); }
+.flutter-demo.engaged { box-shadow: 0 0 0 3px rgba(91, 157, 255, 0.85), 0 0 60px rgba(91, 157, 255, 0.35); }
 .flutter-demo iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
-.flutter-loading { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 14px; background: #0b0c10; color: var(--mute); font-size: 13px; letter-spacing: 0.04em; transition: opacity 0.5s var(--ease) 0.15s; }
+.engage { position: absolute; inset: 0; z-index: 2; display: grid; place-items: end center; padding: 0 0 22px; border: 0; background: linear-gradient(transparent 55%, rgba(5, 7, 10, 0.28)); cursor: pointer; font: inherit; }
+.engage span { display: inline-flex; align-items: center; gap: 9px; padding: 9px 18px; border-radius: 999px; background: rgba(8, 10, 14, 0.86); border: 1px solid rgba(255, 255, 255, 0.18); backdrop-filter: blur(12px); color: #fff; font-size: 13px; font-weight: 500; letter-spacing: 0.02em; transform: translateY(0); transition: transform 0.25s var(--ease), background 0.25s; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35); }
+.engage:hover span, .engage:focus-visible span { transform: translateY(-3px); background: var(--accent); color: #04070d; }
+.engage i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: live 2s ease-out infinite; box-shadow: 0 0 0 0 rgba(91, 157, 255, 0.6); }
+.engage:hover i { background: #04070d; }
+.flutter-loading { position: absolute; inset: 0; z-index: 3; display: grid; place-content: center; justify-items: center; gap: 14px; background: #0b0c10; color: var(--mute); font-size: 13px; letter-spacing: 0.04em; transition: opacity 0.5s var(--ease) 0.15s; }
 .flutter-loading i { width: 30px; height: 30px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, 0.12); border-top-color: var(--accent); animation: spin 0.9s linear infinite; }
 .flutter-loading.done { opacity: 0; pointer-events: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
+.demo-hint-wrap { position: absolute; left: 66.5%; bottom: 4vh; transform: translateX(-50%); }
+.demo-hint { appearance: none; font: inherit; display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px; background: rgba(8, 10, 14, 0.82); backdrop-filter: blur(12px); color: var(--mute); font-size: 12px; letter-spacing: 0.04em; white-space: nowrap; cursor: default; transition: background 0.25s, color 0.25s, border-color 0.25s; }
+.demo-hint i { flex: none; width: 7px; height: 7px; border-radius: 50%; background: #98e6b6; box-shadow: 0 0 0 0 rgba(152, 230, 182, 0.6); animation: live 2s ease-out infinite; }
+.demo-hint.on { cursor: pointer; color: #fff; border-color: rgba(91, 157, 255, 0.7); background: rgba(20, 36, 70, 0.9); }
+.demo-hint.on i { background: var(--accent); }
+.demo-hint b { color: var(--accent); font-weight: 600; }
+.demo-hint kbd { font: inherit; font-size: 11px; padding: 1px 6px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 5px; }
+.inline-device .demo-hint { display: flex; width: 100%; justify-content: center; margin-top: 10px; white-space: normal; text-align: center; }
 .note { margin-top: 18px; font-size: 12px; color: var(--mute); border-top: 1px solid var(--line); padding-top: 14px; }
 .note b { color: var(--ink); font-weight: 600; }
 .inline-device { margin: 0 24px 0 24px; flex: 1; min-width: 0; padding: 12px; border-radius: 28px; background: linear-gradient(145deg, #3a3d44, #202226); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5); }
@@ -245,8 +263,6 @@ h3 { font-size: 1.25rem; letter-spacing: -0.02em; font-weight: 600; }
 
 /* Demo environment */
 .stage-glow { z-index: -1; opacity: var(--glow, 0); background: radial-gradient(46vw 42vh at 66.5% 50%, rgba(91, 157, 255, 0.2), transparent 70%); }
-.demo-badge { position: absolute; left: 66.5%; bottom: 5vh; transform: translateX(-50%); margin: 0; display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px; background: rgba(8, 10, 14, 0.8); backdrop-filter: blur(12px); color: var(--mute); font-size: 12px; letter-spacing: 0.06em; white-space: nowrap; }
-.demo-badge i { width: 7px; height: 7px; border-radius: 50%; background: #98e6b6; box-shadow: 0 0 0 0 rgba(152, 230, 182, 0.6); animation: live 2s ease-out infinite; }
 @keyframes live { to { box-shadow: 0 0 0 9px rgba(152, 230, 182, 0); } }
 
 .hero h1 { font-size: clamp(3rem, 7.4vw, 7rem); }
@@ -275,8 +291,9 @@ h3 { font-size: 1.25rem; letter-spacing: -0.02em; font-weight: 600; }
   .demo-panel .lede { display: none; }
   .demo-panel h2 { font-size: 2rem; }
   .flows { margin-top: 10px; gap: 0; }
-  .flow { padding: 6px 8px; }
-  .flow small { font-size: 11.5px; }
+  .pick { padding: 6px 8px; }
+  .pick small { font-size: 11.5px; }
+  .try { margin-top: 4px; }
   .note { margin-top: 10px; padding-top: 10px; font-size: 11px; }
 }
 
@@ -316,5 +333,5 @@ h3 { font-size: 1.25rem; letter-spacing: -0.02em; font-weight: 600; }
   html { scroll-behavior: auto; }
   [data-reveal] { opacity: 1; transform: none; transition: none; }
   .scroll-cue span { animation: none; }
-  .demo-badge i, .price-pop, .flow li { animation: none; }
+  .demo-hint i, .engage i, .price-pop, .flow li { animation: none; }
 }

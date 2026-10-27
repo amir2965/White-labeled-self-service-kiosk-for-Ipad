@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'dart:math' as math;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../demo/demo_config.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/constants/app_typography.dart';
@@ -255,7 +257,9 @@ class _TemplateSelectionStepState extends ConsumerState<TemplateSelectionStep> {
             child: Center(
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxWidth: isTablet ? 900.0 : screenWidth,
+                  maxWidth: isTablet
+                      ? (DemoConfig.enabled ? 1000.0 : 900.0)
+                      : screenWidth,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -273,13 +277,30 @@ class _TemplateSelectionStepState extends ConsumerState<TemplateSelectionStep> {
                     ),
                     SizedBox(height: AppSpacing.xl),
 
-                    // Template cards
-                    ..._templates.map(
-                      (template) => Padding(
-                        padding: EdgeInsets.only(bottom: AppSpacing.md),
-                        child: _buildTemplateCard(template),
+                    // Template cards (two columns in the wide web demo)
+                    if (DemoConfig.enabled && screenWidth >= 900)
+                      Wrap(
+                        spacing: AppSpacing.md,
+                        runSpacing: AppSpacing.md,
+                        children: _templates
+                            .map(
+                              (template) => SizedBox(
+                                width:
+                                    (math.min(screenWidth - 96, 1000.0) -
+                                        AppSpacing.md) /
+                                    2,
+                                child: _buildTemplateCard(template),
+                              ),
+                            )
+                            .toList(),
+                      )
+                    else
+                      ..._templates.map(
+                        (template) => Padding(
+                          padding: EdgeInsets.only(bottom: AppSpacing.md),
+                          child: _buildTemplateCard(template),
+                        ),
                       ),
-                    ),
 
                     SizedBox(height: AppSpacing.md),
                   ],
@@ -295,11 +316,29 @@ class _TemplateSelectionStepState extends ConsumerState<TemplateSelectionStep> {
     );
   }
 
+  void _openPreview(_TemplateOption option) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TemplatePreviewScreen(
+          template: option.template,
+          templateName: option.name,
+          isOnboarding: true,
+        ),
+      ),
+    );
+  }
+
   Widget _buildTemplateCard(_TemplateOption option) {
     final isSelected = _selectedTemplate == option.template;
 
     return GestureDetector(
       onTap: () {
+        // Web demo: tapping the highlighted card again opens its preview
+        if (DemoConfig.enabled && isSelected) {
+          _openPreview(option);
+          return;
+        }
         setState(() {
           _selectedTemplate = option.template;
         });
@@ -390,28 +429,60 @@ class _TemplateSelectionStepState extends ConsumerState<TemplateSelectionStep> {
                       color: AppColors.gray900,
                     ),
                   ),
-                  SizedBox(height: AppSpacing.sm),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.check_circle_outline,
-                        size: 16,
-                        color: AppColors.gray600,
-                      ),
-                      SizedBox(width: AppSpacing.xs),
-                      Expanded(
-                        child: Text(
-                          option.bestFor,
-                          style: AppTypography.bodySmall.copyWith(
-                            fontSize: 13,
-                            color: AppColors.gray600,
+                  if (!DemoConfig.enabled) ...[
+                    SizedBox(height: AppSpacing.sm),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.check_circle_outline,
+                          size: 16,
+                          color: AppColors.gray600,
+                        ),
+                        SizedBox(width: AppSpacing.xs),
+                        Expanded(
+                          child: Text(
+                            option.bestFor,
+                            style: AppTypography.bodySmall.copyWith(
+                              fontSize: 13,
+                              color: AppColors.gray600,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
+                  ],
                   // Preview button for selected
-                  if (isSelected) ...[
+                  if (isSelected && DemoConfig.enabled) ...[
+                    SizedBox(height: AppSpacing.sm),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppSpacing.sm + 2,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.blue.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.touch_app_outlined,
+                            size: 16,
+                            color: AppColors.blue,
+                          ),
+                          SizedBox(width: 6),
+                          Text(
+                            'Tap to preview',
+                            style: AppTypography.bodySmall.copyWith(
+                              color: AppColors.blue,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ] else if (isSelected) ...[
                     SizedBox(height: AppSpacing.sm),
                     TextButton.icon(
                       onPressed: () {

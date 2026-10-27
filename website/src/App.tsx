@@ -18,10 +18,19 @@ export default function App() {
   const onFlow = useCallback((f: FlowId) => {
     setFlow(f);
     setNonce((n) => n + 1);
+    setEngaged(false);
   }, []);
-  const onRestart = useCallback(() => setNonce((n) => n + 1), []);
+  const onRestart = useCallback(() => {
+    setNonce((n) => n + 1);
+    setEngaged(false);
+  }, []);
+  const [engaged, setEngaged] = useState(false);
+  const onEngage = useCallback((on: boolean) => setEngaged(on), []);
   const [demoActive, setDemoActive] = useState(false);
-  const onDemoActive = useCallback((a: boolean) => setDemoActive(a), []);
+  const onDemoActive = useCallback((a: boolean) => {
+    setDemoActive(a);
+    if (!a) setEngaged(false);
+  }, []);
 
   useScrollRig(onDemoActive);
   useReveal();
@@ -52,7 +61,7 @@ export default function App() {
             <Scene
               mobile={mobile}
               liveActive={demoActive && !mobile}
-              liveChildren={mobile ? null : <FlutterDemo flow={flow} nonce={nonce} />}
+              liveChildren={mobile ? null : <FlutterDemo flow={flow} nonce={nonce} engaged={engaged} onEngage={onEngage} />}
             />
           </Suspense>
         )}
@@ -63,7 +72,7 @@ export default function App() {
       <main>
         <Hero fallback={!use3d} />
         <Product inline={mobile} />
-        <Demo flow={flow} nonce={nonce} onFlow={onFlow} onRestart={onRestart} inline={inlineDemo} />
+        <Demo flow={flow} nonce={nonce} engaged={engaged} onEngage={onEngage} onFlow={onFlow} onRestart={onRestart} inline={inlineDemo} />
         <Merchant inline={inlineDemo} />
         <Engineering inline={mobile} />
         <Decisions />

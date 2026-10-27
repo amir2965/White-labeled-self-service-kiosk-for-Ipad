@@ -31,6 +31,7 @@ import 'templates/coffee_order_pad_with_cart_template.dart';
 import '../providers/menu_provider.dart';
 import '../providers/template_provider.dart';
 import '../providers/featured_display_provider.dart';
+import '../../demo/demo_config.dart';
 
 /// Preview screen for selected template
 class TemplatePreviewScreen extends ConsumerStatefulWidget {
@@ -92,6 +93,11 @@ class _TemplatePreviewScreenState extends ConsumerState<TemplatePreviewScreen>
   }
 
   void _applyDefaultFeaturedItems() {
+    // Featured/pinned lookups follow the selected template, so the previewed
+    // layout must be the selected one while the web demo shows it.
+    if (DemoConfig.enabled) {
+      ref.read(selectedTemplateProvider.notifier).selectTemplate(widget.template);
+    }
     final menuState = ref.read(menuProvider);
     final categories = menuState.sortedCategories;
 
@@ -140,6 +146,18 @@ class _TemplatePreviewScreenState extends ConsumerState<TemplatePreviewScreen>
           // Minimum 2 for bento
           featuredMap[category.id] = products
               .take(products.length)
+              .map((p) => p.id)
+              .toList();
+        }
+      }
+    } else if (DemoConfig.enabled) {
+      // Web demo: every layout gets pinned/featured items so hero rails,
+      // spotlights and highlight tiles never render empty.
+      for (final category in categories) {
+        final products = menuState.getProductsByCategory(category.id);
+        if (products.length >= 2) {
+          featuredMap[category.id] = products
+              .take(products.length >= 4 ? 4 : products.length)
               .map((p) => p.id)
               .toList();
         }
@@ -221,22 +239,24 @@ class _TemplatePreviewScreenState extends ConsumerState<TemplatePreviewScreen>
                         ),
                         child: Row(
                           children: [
-                            // Back button
-                            Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.white.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: IconButton(
-                                icon: const Icon(
-                                  Icons.arrow_back,
-                                  color: AppColors.white,
+                            // Back button (the web demo only offers "Change Template")
+                            if (!DemoConfig.enabled) ...[
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.white.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                onPressed: () => Navigator.pop(context),
-                                tooltip: 'Back to selection',
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.arrow_back,
+                                    color: AppColors.white,
+                                  ),
+                                  onPressed: () => Navigator.pop(context),
+                                  tooltip: 'Back to selection',
+                                ),
                               ),
-                            ),
-                            SizedBox(width: AppSpacing.md),
+                              SizedBox(width: AppSpacing.md),
+                            ],
                             // Preview label
                             Expanded(
                               child: Column(
@@ -295,9 +315,15 @@ class _TemplatePreviewScreenState extends ConsumerState<TemplatePreviewScreen>
                             SizedBox(width: AppSpacing.sm),
                             // Change Template button
                             OutlinedButton.icon(
-                              onPressed: () => context.pop(),
+                              onPressed: () => DemoConfig.enabled
+                                  ? Navigator.of(context).pop()
+                                  : context.pop(),
                               icon: Icon(Icons.swap_horiz, size: 18),
-                              label: Text('Change Template'),
+                              label: Text(
+                                DemoConfig.enabled
+                                    ? 'All layouts'
+                                    : 'Change Template',
+                              ),
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: AppColors.white,
                                 side: BorderSide(
@@ -322,7 +348,19 @@ class _TemplatePreviewScreenState extends ConsumerState<TemplatePreviewScreen>
                                     .read(selectedTemplateProvider.notifier)
                                     .selectTemplate(widget.template);
                                 // Navigate based on context
-                                if (widget.isOnboarding) {
+                                if (DemoConfig.enabled) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        '${widget.templateName} selected',
+                                      ),
+                                      behavior: SnackBarBehavior.floating,
+                                      width: 320,
+                                      duration: const Duration(seconds: 2),
+                                    ),
+                                  );
+                                  Navigator.pop(context);
+                                } else if (widget.isOnboarding) {
                                   // Return to onboarding flow
                                   Navigator.pop(context);
                                 } else if (widget.fromDashboard) {

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/constants/app_typography.dart';
+import '../../../demo/demo_config.dart';
 import '../../../presentation/analytics/theme_provider.dart';
 import '../providers/sales_summary_provider.dart';
 import '../models/sales_summary_model.dart';
@@ -340,17 +341,21 @@ class _SalesSummaryContentV2State extends ConsumerState<SalesSummaryContentV2> {
         children: [
           Row(
             children: [
-              // Back button
-              IconButton(
-                onPressed: () => Navigator.of(context).pop(),
-                icon: const Icon(Icons.arrow_back),
-                iconSize: 24,
-                color: isDarkMode ? Colors.white : AppColors.black,
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
-              ),
-
-              const SizedBox(width: AppSpacing.md),
+              // Back button (hidden in the web demo)
+              if (!DemoConfig.enabled) ...[
+                IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.arrow_back),
+                  iconSize: 24,
+                  color: isDarkMode ? Colors.white : AppColors.black,
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(
+                    minWidth: 40,
+                    minHeight: 40,
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.md),
+              ],
 
               // Title with period indicator
               Expanded(
