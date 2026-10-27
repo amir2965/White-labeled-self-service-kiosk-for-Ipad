@@ -1,6 +1,6 @@
 import { lazy, Suspense, useCallback, useMemo, useState } from 'react';
 import FlutterDemo, { type FlowId } from './kiosk/FlutterDemo';
-import { About, Decisions, Demo, Engineering, Hero, Merchant, Product, State } from './sections/Sections';
+import { About, Decisions, Demo, Engineering, Hero, Merchant, Product, State, Statement } from './sections/Sections';
 import { hasWebGL, useMedia, useReveal, useScrollRig } from './hooks';
 import { site } from './site.config';
 
@@ -71,6 +71,7 @@ export default function App() {
 
       <main>
         <Hero fallback={!use3d} />
+        <Statement reduced={reduced} />
         <Product inline={mobile} />
         <Demo flow={flow} nonce={nonce} engaged={engaged} onEngage={onEngage} onFlow={onFlow} onRestart={onRestart} inline={inlineDemo} />
         <Merchant inline={inlineDemo} />

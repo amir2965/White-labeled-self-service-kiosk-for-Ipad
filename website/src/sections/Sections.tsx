@@ -46,6 +46,51 @@ export function Hero({ fallback }: { fallback: boolean }) {
   );
 }
 
+/* ---------------------------------------------------------- Statement */
+
+/** Full-width cinematic band: a muted looping clip that only plays while it is on screen. */
+export function Statement({ reduced }: { reduced: boolean }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v || reduced || !('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(([e]) => (e.isIntersecting ? v.play().catch(() => {}) : v.pause()), { threshold: 0.25 });
+    io.observe(v);
+    return () => io.disconnect();
+  }, [reduced]);
+  const base = import.meta.env.BASE_URL;
+  return (
+    <section id="statement" className="section statement" aria-labelledby="statement-title">
+      <div className="statement-media">
+        <video
+          ref={ref}
+          muted
+          loop
+          playsInline
+          preload="none"
+          poster={`${base}media/white-label-poster.jpg`}
+          aria-hidden="true"
+          tabIndex={-1}
+        >
+          {!reduced && <source src={`${base}media/white-label.mp4`} type="video/mp4" />}
+        </video>
+      </div>
+      <div className="wrap statement-copy" data-reveal>
+        <div className="panel-in">
+          <p className="eyebrow">The idea</p>
+          <h2 id="statement-title">
+            <em>White-labelled</em>: one product, many brands.
+          </h2>
+          <p className="lede">
+            The same kiosk app can carry a different name, logo, colours, fonts and menu layout for each business. This
+            project explores how far that idea can go.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ------------------------------------------------------------ Walkthrough */
 
 interface Step {
