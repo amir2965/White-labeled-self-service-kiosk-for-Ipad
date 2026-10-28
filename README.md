@@ -1,4 +1,3 @@
-<img width="2360" height="1640" alt="localhost_57406_(iPad Air) (8)" src="https://github.com/user-attachments/assets/8e672868-0b28-49e2-870d-c68a6753fc04" />
 
 
 
