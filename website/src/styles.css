@@ -301,7 +301,28 @@ h3 { font-size: 1.25rem; letter-spacing: -0.02em; font-weight: 600; }
 .portrait-status { margin: 16px 0 0; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 12.5px; color: var(--mute); text-align: center; }
 .portrait-status i { flex: none; width: 7px; height: 7px; border-radius: 50%; background: #98e6b6; box-shadow: 0 0 0 0 rgba(152, 230, 182, 0.6); animation: live 2s ease-out infinite; }
 
+/* Contact card: medium-size, one clear address with a copy action */
+.contact { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px; align-items: center; margin-top: 30px; padding: 18px 20px; border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 20px; background: linear-gradient(135deg, rgba(91, 157, 255, 0.13), rgba(255, 255, 255, 0.03) 58%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08); }
+.contact-icon { flex: none; width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center; color: #9cc2ff; background: rgba(91, 157, 255, 0.16); border: 1px solid rgba(91, 157, 255, 0.34); }
+.contact-body { min-width: 0; display: grid; gap: 2px; }
+.contact-label { font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--mute); }
+.contact-mail { display: inline-flex; align-items: baseline; gap: 8px; font-size: clamp(1.08rem, 1.7vw, 1.32rem); font-weight: 500; letter-spacing: -0.02em; line-height: 1.25; color: #fff; text-decoration: none; overflow-wrap: anywhere; transition: color 0.2s; }
+.contact-mail span { font-size: 0.72em; color: var(--accent); transition: transform 0.2s var(--ease); }
+.contact-mail:hover { color: #bcd6ff; text-decoration: underline; text-decoration-color: rgba(91, 157, 255, 0.55); text-underline-offset: 4px; }
+.contact-mail:hover span { transform: translate(2px, -2px); }
+.contact-note { margin-top: 3px; font-size: 12.5px; line-height: 1.45; color: var(--mute); }
+.copy { appearance: none; font: inherit; flex: none; height: 40px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.05); color: #c3cad6; font-size: 13px; font-weight: 500; cursor: pointer; transition: color 0.2s, border-color 0.2s, background 0.2s; }
+.copy:hover { color: #fff; border-color: rgba(255, 255, 255, 0.32); background: rgba(255, 255, 255, 0.09); }
+.copy.done { color: #98e6b6; border-color: rgba(120, 220, 160, 0.45); background: rgba(120, 220, 160, 0.1); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+@media (max-width: 560px) {
+  .contact { grid-template-columns: auto minmax(0, 1fr); gap: 12px; padding: 16px; border-radius: 16px; }
+  .contact .copy { grid-column: 1 / -1; width: 100%; height: 44px; }
+}
+
 .footer { position: relative; z-index: 1; padding: 40px clamp(20px, 3vw, 40px) 48px; border-top: 1px solid var(--line); color: var(--mute); font-size: 12px; display: grid; gap: 6px; background: rgba(7, 8, 10, 0.8); backdrop-filter: blur(10px); }
+.footer-mail { color: #c3cad6; text-decoration: none; }
+.footer-mail:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 
 /* Short laptop screens: keep the demo panel and layer cards inside the viewport */
 @media (max-height: 800px) and (min-width: 821px) {

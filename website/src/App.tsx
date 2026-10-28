@@ -75,7 +75,9 @@ export default function App() {
         <p>
           The demo is simulated: nothing is charged. Menu photos from Unsplash; start-screen terrace photo from Wikimedia Commons (CC0). The 3D iPad is built in code with three.js and is not an Apple product.
         </p>
-        <p>© {new Date().getFullYear()} {site.name}</p>
+        <p>© {new Date().getFullYear()} {site.name}{' · '}
+          <a className="footer-mail" href={`mailto:${site.email}`}>{site.email}</a>
+        </p>
       </footer>
     </>
   );

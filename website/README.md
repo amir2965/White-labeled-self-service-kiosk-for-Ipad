@@ -34,7 +34,7 @@ npm run preview
 
 ## Edit your details
 
-Personal links live in [`src/site.config.ts`](src/site.config.ts). Set `email` to show a contact button; verify the LinkedIn profile URL.
+Personal links live in [`src/site.config.ts`](src/site.config.ts). The `email` value appears as a copyable contact card in the About section and as a link in the footer; verify the LinkedIn profile URL.
 
 ## Performance and accessibility
 

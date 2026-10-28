@@ -9,6 +9,6 @@ export const site = {
   // Verify this slug matches your profile URL before publishing.
   linkedinProfile: 'https://www.linkedin.com/in/amirmahdi-sarikhanifard',
   linkedinPost: 'https://lnkd.in/p/gej2HySb',
-  // Optional: set an address to show a contact link in the footer.
-  email: '',
+  // Shown as a contact card in the About section and as a link in the footer.
+  email: 'amir2965@yahoo.com',
 };

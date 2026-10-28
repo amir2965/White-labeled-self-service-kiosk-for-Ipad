@@ -205,6 +205,9 @@ dialog::backdrop { background: rgb(0 0 0 / 72%); }
   .state-card li .badge { font-size: 9px; padding: 3px 6px; }
   .state-foot { padding: 20px; font-size: 14px; line-height: 1.7; }
   .about-grid { gap: 28px; }
+  .contact { margin-top: 26px; padding: 16px; }
+  .contact-icon { width: 38px; height: 38px; border-radius: 12px; }
+  .contact-mail { font-size: 17px; }
   .about .portrait { order: 0; width: 100%; max-width: 400px; }
   .about .cta { display: grid; grid-template-columns: 1fr; }
   .about .link { min-height: 44px; font-size: 14px; line-height: 1.6; margin-top: 20px; padding-block: 8px; }

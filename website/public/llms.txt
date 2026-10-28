@@ -9,6 +9,7 @@
 - Location: Brisbane, Queensland, Australia
 - Study: Bachelor of Cyber Security, Griffith University
 - Availability: Open to junior software engineering roles and internships
+- Email: amir2965@yahoo.com
 - Focus: Flutter, Dart, React, TypeScript, application state, self-service kiosks, interactive devices, merchant tools and reporting
 
 ## Project

@@ -856,6 +856,53 @@ export function State() {
 
 /* ---------------------------------------------------------------- About */
 
+function ContactCard() {
+  const [copied, setCopied] = useState(false);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(site.email);
+    } catch {
+      const field = document.createElement('textarea');
+      field.value = site.email;
+      field.setAttribute('readonly', '');
+      field.style.position = 'fixed';
+      field.style.opacity = '0';
+      document.body.appendChild(field);
+      field.select();
+      document.execCommand('copy');
+      field.remove();
+    }
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 2200);
+  };
+
+  return (
+    <div className="contact" data-reveal>
+      <span className="contact-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="5" width="18" height="14" rx="2.5" />
+          <path d="m4 7 8 6 8-6" />
+        </svg>
+      </span>
+      <div className="contact-body">
+        <span className="contact-label">Email</span>
+        <a className="contact-mail" href={`mailto:${site.email}`}>
+          {site.email}
+          <Arrow />
+        </a>
+        <p className="contact-note">The fastest way to reach me — roles, internships or kiosk work.</p>
+      </div>
+      <button type="button" className={copied ? 'copy done' : 'copy'} onClick={copy}>
+        {copied ? 'Copied' : 'Copy'}
+      </button>
+      <span className="sr-only" role="status" aria-live="polite">
+        {copied ? 'Email address copied' : ''}
+      </span>
+    </div>
+  );
+}
+
 export function About() {
   return (
     <section id="about" className="section about" aria-labelledby="about-title">
@@ -884,6 +931,7 @@ export function About() {
             I’m currently looking for junior software engineering opportunities and internships in Brisbane or remote,
             particularly in application development, fintech and cloud-connected software.
           </p>
+          <ContactCard />
           <ul className="tags" aria-label="Core technologies">
             {['Flutter', 'Dart', 'React', 'TypeScript', 'Riverpod', 'Three.js', 'Git'].map((t) => (
               <li key={t}>{t}</li>
@@ -899,11 +947,6 @@ export function About() {
             <a className="btn" href={site.github} target="_blank" rel="noreferrer">
               Kiosk source <Arrow />
             </a>
-            {site.email && (
-              <a className="btn" href={`mailto:${site.email}`}>
-                Email
-              </a>
-            )}
           </div>
           <a className="link" href={site.linkedinPost} target="_blank" rel="noreferrer">
             I wrote about the project on LinkedIn <Arrow />
