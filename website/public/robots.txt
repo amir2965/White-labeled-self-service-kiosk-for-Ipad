@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://tabseen.github.io/White-labeled-self-service-kiosk-for-Ipad/sitemap.xml

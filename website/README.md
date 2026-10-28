@@ -58,6 +58,16 @@ The workflow at [`.github/workflows/deploy-site.yml`](../.github/workflows/deplo
 
 The build uses relative asset paths (`base: './'`), so it also works unchanged on Cloudflare Pages, Netlify or Vercel (build command `npm run build`, output `dist`, root `website`).
 
+## Search, verification and structured data
+
+- Canonical URL: `https://tabseen.github.io/White-labeled-self-service-kiosk-for-Ipad/`.
+- Google Search Console is verified with the `google-site-verification` meta tag in [`index.html`](index.html) and the verification HTML file in [`public/`](public). Keep both in place after verification succeeds.
+- [`public/robots.txt`](public/robots.txt) allows crawling and points to [`public/sitemap.xml`](public/sitemap.xml), which lists the page and its key product screenshots for image search.
+- [`public/llms.txt`](public/llms.txt) gives AI answer engines a concise, accurate description of the developer, the project and its limitations.
+- `index.html` includes Open Graph, Twitter Card and JSON-LD structured data: `Person`, `WebSite`, `WebPage` and `SoftwareApplication`.
+- After deploying, submit `https://tabseen.github.io/White-labeled-self-service-kiosk-for-Ipad/sitemap.xml` in Search Console and request indexing for the home page.
+- If the site moves to a custom domain, update the canonical URL, Open Graph/Twitter URLs, every JSON-LD `@id`/`url`, the sitemap and `llms.txt` together. Do not keep two canonical URLs live.
+
 ## Credits
 
 Menu photos from [Unsplash](https://unsplash.com/license). Inter font (SIL OFL). Not affiliated with Apple or any payment provider.

@@ -19,12 +19,12 @@ export function Hero({ fallback, mobile }: { fallback: boolean; mobile: boolean 
     <section id="hero" className="section hero" aria-labelledby="hero-title">
       {fallback && !mobile && <img className="hero-static" src={shot('12-kiosk-welcome')} alt="The kiosk welcome screen on an iPad" />}
       <div className="wrap">
-        <p className="eyebrow" data-reveal>Independent software project · Flutter / Dart</p>
+        <p className="eyebrow" data-reveal>Independent kiosk project · Flutter / Dart</p>
         <h1 id="hero-title" data-reveal>
           One kiosk.<br />Different<br /><em>businesses.</em>
         </h1>
         <p className="lede" data-reveal>
-          <span className="hero-summary">A configurable self-service ordering experience built with Flutter.</span>{' '}<span className="hero-context">I designed and developed it to explore how a
+          <span className="hero-summary">A configurable self-service kiosk and interactive ordering experience built with Flutter.</span>{' '}<span className="hero-context">I designed and developed it to explore how a
           single tablet application could support different restaurants and cafés without a completely different interface
           for each business.</span>
         </p>
@@ -139,7 +139,7 @@ export function Statement({ reduced, mobile }: { reduced: boolean; mobile: boole
       <div className="wrap statement-copy" data-reveal>
         <div className="panel-in">
           <p className="eyebrow">The idea</p>
-          <h2 id="statement-title">One product, many brands.</h2>
+          <h2 id="statement-title">One kiosk, many brands.</h2>
           <p className="lede">
             The same kiosk app can carry a different name, logo, colours, fonts and menu layout for each business. This
             project explores how far that idea can go.
@@ -364,7 +364,7 @@ export function Product({ inline }: { inline: boolean }) {
     <Walkthrough
       id="product"
       eyebrow="01 / The product"
-      title="Ordering should feel straightforward."
+      title="Self-service ordering, end to end."
       lede={<p className="lede">The customer experience follows the steps of a typical restaurant order, from the first screen to checkout.</p>}
       steps={PRODUCT_STEPS}
       inline={inline}
@@ -724,7 +724,7 @@ export function Engineering({ inline }: { inline: boolean }) {
     <Walkthrough
       id="engineering"
       eyebrow="04 / Engineering"
-      title="How I built it."
+      title="How I built the kiosk."
       lede={
         <p className="lede">
           The project uses Flutter and Dart, with separate application layers for user interfaces, state management and data
@@ -872,14 +872,23 @@ export function About() {
             connecting the underlying logic and understanding what it would take to make the system more reliable.
           </p>
           <p className="prose">
+            I build Flutter applications and interactive kiosk experiences—from customer-facing ordering screens to the
+            merchant tools and reporting behind them.
+          </p>
+          <p className="prose">
             This kiosk started as an exploration of self-service technology for local businesses. As it developed, I became
             increasingly interested in the engineering behind it—application state, reusable components, backend
             communication and the decisions that separate a working prototype from production software.
           </p>
           <p className="prose">
-            I’m currently looking for junior software engineering opportunities and internships, particularly in application
-            development, fintech and cloud-connected software.
+            I’m currently looking for junior software engineering opportunities and internships in Brisbane or remote,
+            particularly in application development, fintech and cloud-connected software.
           </p>
+          <ul className="tags" aria-label="Core technologies">
+            {['Flutter', 'Dart', 'React', 'TypeScript', 'Riverpod', 'Three.js', 'Git'].map((t) => (
+              <li key={t}>{t}</li>
+            ))}
+          </ul>
           <div className="cta">
             <a className="btn primary" href={site.githubProfile} target="_blank" rel="noreferrer">
               View my GitHub <Arrow />

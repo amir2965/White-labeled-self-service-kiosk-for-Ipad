@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+>
+  <url>
+    <loc>https://tabseen.github.io/White-labeled-self-service-kiosk-for-Ipad/</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://tabseen.github.io/White-labeled-self-service-kiosk-for-Ipad/screens/12-kiosk-welcome-1024.webp</image:loc>
+      <image:title>Self-service kiosk welcome screen</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tabseen.github.io/White-labeled-self-service-kiosk-for-Ipad/screens/13-kiosk-menu-1024.webp</image:loc>
+      <image:title>Interactive kiosk menu with product categories</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tabseen.github.io/White-labeled-self-service-kiosk-for-Ipad/screens/14-kiosk-order-menu-1024.webp</image:loc>
+      <image:title>Self-service ordering kiosk menu</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tabseen.github.io/White-labeled-self-service-kiosk-for-Ipad/screens/16-kiosk-qr-payment-1024.webp</image:loc>
+      <image:title>QR code checkout on a self-service kiosk</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tabseen.github.io/White-labeled-self-service-kiosk-for-Ipad/screens/06-kitchen-display-1024.webp</image:loc>
+      <image:title>Kitchen display for restaurant orders</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tabseen.github.io/White-labeled-self-service-kiosk-for-Ipad/screens/07-analytics-1024.webp</image:loc>
+      <image:title>Sales analytics dashboard</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tabseen.github.io/White-labeled-self-service-kiosk-for-Ipad/screens/09-branding-typography-1024.webp</image:loc>
+      <image:title>White-label kiosk branding and typography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://tabseen.github.io/White-labeled-self-service-kiosk-for-Ipad/screens/03-template-gallery-1024.webp</image:loc>
+      <image:title>Menu template gallery for a self-service kiosk</image:title>
+    </image:image>
+  </url>
+</urlset>

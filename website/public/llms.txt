@@ -1,0 +1,27 @@
+# Mahdi Sarikhanifard — Self-Service Kiosk & Interactive Device Developer
+
+> Portfolio of Mahdi Sarikhanifard, a software engineering student and developer in Brisbane, Australia, building Flutter applications, white-label self-service kiosks and interactive device experiences.
+
+## About
+
+- Name: Mahdi Sarikhanifard (Amir Mahdi Sarikhanifard)
+- Role: Software engineering student and developer
+- Location: Brisbane, Queensland, Australia
+- Study: Bachelor of Cyber Security, Griffith University
+- Availability: Open to junior software engineering roles and internships
+- Focus: Flutter, Dart, React, TypeScript, application state, self-service kiosks, interactive devices, merchant tools and reporting
+
+## Project
+
+- Name: White-Label Self-Service Kiosk
+- Description: A tablet-style, self-service ordering kiosk with a merchant back office. Customers browse a menu, customise items and pay at the counter or through a simulated QR checkout.
+- Stack: Flutter, Dart, Riverpod, go_router, freezed, Shelf, fl_chart
+- Includes: customer ordering, item options, cart, QR payment simulation, branding and typography, menu templates, menu management, kitchen display, analytics and CSV/PDF export
+- Status: Portfolio prototype. Payments and menu scanning are simulated; merchant data is sample or in-memory data.
+- Source: https://github.com/tabseen/White-labeled-self-service-kiosk-for-Ipad
+
+## Links
+
+- Website: https://tabseen.github.io/White-labeled-self-service-kiosk-for-Ipad/
+- GitHub profile: https://github.com/tabseen
+- LinkedIn: https://www.linkedin.com/in/amirmahdi-sarikhanifard
