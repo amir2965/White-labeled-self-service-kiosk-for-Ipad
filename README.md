@@ -1,3 +1,7 @@
+
+
+
+
 # Self-Service Ordering Kiosk (Flutter)
 
 A tablet-style, self-service ordering kiosk with a merchant back office, built with Flutter (web-first demo). Customers browse a menu, customise items, and pay either **at the counter** or by **scanning a QR code** that opens a simulated phone checkout page.
@@ -13,7 +17,7 @@ A tablet-style, self-service ordering kiosk with a merchant back office, built w
 
 A one-minute overview of the White-Label Self-Service Kiosk.
 
-https://github.com/user-attachments/assets/YOUR-VIDEO-ID
+https://github.com/user-attachments/assets/3df3509e-a6c5-489e-83ce-6397ad4bb9e3
 
 *White-Label Self-Service Kiosk — Project Demonstration*
 
