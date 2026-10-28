@@ -13,19 +13,12 @@ A tablet-style, self-service ordering kiosk with a merchant back office, built w
 > Interactive 3D showcase with a try-it-yourself demo: [`website/`](website) (deploys free to GitHub Pages).
 
 
+
 ## 🎬 Project Video Walkthrough
 
-<p align="center">
-  <video
-    src="https://github.com/user-attachments/assets/32ecbd2e-36c0-4b52-a799-3389cd4e05bc"
-    width="480"
-    controls>
-  </video>
+A one-minute demonstration of the White-Label Self-Service Kiosk.
 
-
-
-
-</p>
+https://github.com/user-attachments/assets/32ecbd2e-36c0-4b52-a799-3389cd4e05bc
 
 <p align="center">
   <sub>White-Label Self-Service Kiosk · Video Demonstration</sub>
