@@ -8,23 +8,14 @@ A tablet-style, self-service ordering kiosk with a merchant back office, built w
 >
 > Interactive 3D showcase with a try-it-yourself demo: [`website/`](website) (deploys free to GitHub Pages).
 
-## 🎬 Project Video 
 
-<p align="center">
-  <a href="https://gitdiagram.com/tabseen/white-labeled-self-service-kiosk-for-ipad/video">
-    <img
-      src="./assets/video-thumbnail.png"
-      alt="Watch the self-service kiosk project walkthrough"
-      width="700"
-    />
-  </a>
-</p>
+## 🎬 Video 
 
-<p align="center">
-  <strong>▶ Watch the Project Walkthrough</strong>
-  <br>
-  <sub>White-Label Self-Service Kiosk · Project Overview</sub>
-</p>
+A one-minute overview of the White-Label Self-Service Kiosk.
+
+https://github.com/user-attachments/assets/YOUR-VIDEO-ID
+
+*White-Label Self-Service Kiosk — Project Demonstration*
 
 
 ## Screenshots
