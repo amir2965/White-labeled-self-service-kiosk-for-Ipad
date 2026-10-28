@@ -17,10 +17,14 @@ A tablet-style, self-service ordering kiosk with a merchant back office, built w
 
 <p align="center">
   <video
-    src="https://github.com/user-attachments/assets/YOUR-VIDEO-ID"
+    src="https://github.com/user-attachments/assets/32ecbd2e-36c0-4b52-a799-3389cd4e05bc"
     width="480"
     controls>
   </video>
+
+
+
+
 </p>
 
 <p align="center">
