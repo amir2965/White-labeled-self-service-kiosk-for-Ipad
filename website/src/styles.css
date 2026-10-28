@@ -310,7 +310,6 @@ h3 { font-size: 1.25rem; letter-spacing: -0.02em; font-weight: 600; }
 .contact-mail span { font-size: 0.72em; color: var(--accent); transition: transform 0.2s var(--ease); }
 .contact-mail:hover { color: #bcd6ff; text-decoration: underline; text-decoration-color: rgba(91, 157, 255, 0.55); text-underline-offset: 4px; }
 .contact-mail:hover span { transform: translate(2px, -2px); }
-.contact-note { margin-top: 3px; font-size: 12.5px; line-height: 1.45; color: var(--mute); }
 .copy { appearance: none; font: inherit; flex: none; height: 40px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.05); color: #c3cad6; font-size: 13px; font-weight: 500; cursor: pointer; transition: color 0.2s, border-color 0.2s, background 0.2s; }
 .copy:hover { color: #fff; border-color: rgba(255, 255, 255, 0.32); background: rgba(255, 255, 255, 0.09); }
 .copy.done { color: #98e6b6; border-color: rgba(120, 220, 160, 0.45); background: rgba(120, 220, 160, 0.1); }

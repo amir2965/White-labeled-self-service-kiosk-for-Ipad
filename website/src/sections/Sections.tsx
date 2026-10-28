@@ -891,7 +891,6 @@ function ContactCard() {
           {site.email}
           <Arrow />
         </a>
-        <p className="contact-note">The fastest way to reach me — roles, internships or kiosk work.</p>
       </div>
       <button type="button" className={copied ? 'copy done' : 'copy'} onClick={copy}>
         {copied ? 'Copied' : 'Copy'}
