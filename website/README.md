@@ -7,10 +7,10 @@ An interactive 3D showcase for the self-service kiosk in the repo root. Scroll t
 | | |
 |---|---|
 | 3D iPad | Procedural three.js geometry (no downloaded model, so no asset licences). Screen textures are real screenshots of the Flutter app. |
-| Demo kiosk | The real Flutter web build, embedded from `/app`. On phones it loads only when the visitor launches an experience. |
+| Demo kiosk | The real Flutter web build, embedded from `/app`. On phones the same interfaces play as an automated, hands-free tour. |
 | Payment | **Simulated.** The QR code is real but encodes a demo string; a button stands in for the customer's phone. Nothing is charged or sent anywhere. |
 
-The Flutter demo includes its CanvasKit runtime. It is loaded independently of the showcase, so browsing the mobile page does not download or initialise the app.
+The Flutter demo includes its CanvasKit runtime. It is loaded independently of the showcase, so browsing the mobile page does not download or initialise the app. Phones show a lightweight film of the real screens instead; tablets and desktops embed the live app.
 
 ## Stack
 
@@ -41,7 +41,8 @@ Personal links live in [`src/site.config.ts`](src/site.config.ts). Set `email` t
 - The 3D scene is dynamically imported on desktop. Mobile does not download or initialise WebGL, and has no scroll rig or pointer tracking.
 - Desktop pixel ratio is capped at 1.75; lighting is built in-scene, with no HDR downloads.
 - `prefers-reduced-motion` or no WebGL: the 3D stage is skipped, a static screenshot is shown and the demo renders inline.
-- Phones: text-first hero, lightweight device artwork, compact chapter layouts, full navigation in a native modal, and an on-demand full-screen app workspace. Touch landscape layouts remain mobile through 1100px when the viewport is short.
+- Phones: text-first hero, lightweight device artwork, compact chapter layouts, full navigation in a native modal, and an automated five-experience walkthrough of the real app screens. Touch landscape layouts remain mobile through 1100px when the viewport is short.
+- The brand film autoplays muted and inline on phones as it approaches the viewport, then keeps playing off screen; desktop plays it only while in view. The mobile walkthrough advances automatically, loops through every experience and can be paused.
 - Ordering adapts to phone width. Merchant tools preserve a readable tablet canvas with internal horizontal/vertical scrolling; landscape provides more room.
 - The showcase uses semantic HTML, keyboard-focusable controls, visible focus rings, native dialog focus containment, safe-area padding, and reduced-motion support. The embedded Flutter app has its own accessibility behavior.
 - Screenshots use responsive WebP assets with intrinsic dimensions and lazy loading below the hero. The self-hosted font uses a single Latin variable font with `font-display: swap`.

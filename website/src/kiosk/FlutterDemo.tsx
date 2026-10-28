@@ -67,7 +67,6 @@ interface Props {
   nonce: number;
   engaged: boolean;
   onEngage: (on: boolean) => void;
-  releaseOnPointerLeave?: boolean;
 }
 
 /**
@@ -75,7 +74,7 @@ interface Props {
  * Until the visitor clicks it, the page scrolls normally over the device; after a click the app takes the
  * wheel and touch input, and Esc, the "Done" pill or leaving the device hands scrolling back.
  */
-export default function FlutterDemo({ flow, nonce, engaged, onEngage, releaseOnPointerLeave = true }: Props) {
+export default function FlutterDemo({ flow, nonce, engaged, onEngage }: Props) {
   const frame = useRef<HTMLIFrameElement>(null);
   const [armed, setArmed] = useState(false);
   const [ready, setReady] = useState(false);
@@ -123,7 +122,7 @@ export default function FlutterDemo({ flow, nonce, engaged, onEngage, releaseOnP
   return (
     <div
       className={`flutter-demo${engaged ? ' engaged' : ''}`}
-      onPointerLeave={(e) => releaseOnPointerLeave && e.pointerType === 'mouse' && engaged && onEngage(false)}
+      onPointerLeave={(e) => e.pointerType === 'mouse' && engaged && onEngage(false)}
     >
       {armed && (
         <iframe

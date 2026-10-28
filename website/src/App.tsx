@@ -58,7 +58,7 @@ export default function App() {
 
       <main>
         <Hero fallback={!use3d} mobile={mobile} />
-        <Statement reduced={reduced || mobile} mobile={mobile} />
+        <Statement reduced={reduced} mobile={mobile} />
         <Product inline={mobile} />
         <Demo flow={flow} nonce={nonce} engaged={engaged} onEngage={onEngage} onFlow={onFlow} onRestart={onRestart} inline={inlineDemo} mobile={mobile} />
         <Merchant inline={inlineDemo} />

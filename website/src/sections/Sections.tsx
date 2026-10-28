@@ -32,7 +32,7 @@ export function Hero({ fallback, mobile }: { fallback: boolean; mobile: boolean 
           It brings together a customer ordering experience, merchant configuration tools and a simulated QR payment workflow.
         </p>
         <div className="cta" data-reveal>
-          <a className="btn primary" href="#demo">Explore the interactive demo</a>
+          <a className="btn primary" href="#demo">{mobile ? 'Watch the walkthrough' : 'Explore the interactive demo'}</a>
           <a className="btn" href={site.github} target="_blank" rel="noreferrer">
             View source code <Arrow />
           </a>
@@ -57,32 +57,84 @@ export function Hero({ fallback, mobile }: { fallback: boolean; mobile: boolean 
 
 /* ---------------------------------------------------------- Statement */
 
-/** Full-width cinematic band: a muted looping clip that only plays while it is on screen. */
+/** Full-width cinematic band: a muted looping clip, always playing on phones. */
 export function Statement({ reduced, mobile }: { reduced: boolean; mobile: boolean }) {
   const ref = useRef<HTMLVideoElement>(null);
+  const [blocked, setBlocked] = useState(false);
+
   useEffect(() => {
     const v = ref.current;
-    if (!v || reduced || !('IntersectionObserver' in window)) return;
+    if (!v || reduced) return;
+
+    if (mobile) {
+      let disposed = false;
+      let io: IntersectionObserver | null = null;
+      const play = () => {
+        if (disposed || !v.paused) return;
+        v.play().then(() => setBlocked(false)).catch(() => setBlocked(true));
+      };
+      const onVisibility = () => {
+        if (document.visibilityState === 'visible') play();
+      };
+      const clearBlocked = () => setBlocked(false);
+      // Muted inline playback starts as the film approaches the viewport, then
+      // keeps running off screen. These listeners retry after a browser policy
+      // delay, returning to the tab, or the first touch.
+      v.addEventListener('playing', clearBlocked);
+      v.addEventListener('canplay', play);
+      window.addEventListener('pageshow', play);
+      document.addEventListener('visibilitychange', onVisibility);
+      document.addEventListener('pointerdown', play, { passive: true });
+      if ('IntersectionObserver' in window) {
+        io = new IntersectionObserver(([e]) => {
+          if (!e.isIntersecting) return;
+          play();
+          io?.disconnect();
+        }, { rootMargin: '200px 0px' });
+        io.observe(v);
+      } else {
+        play();
+      }
+      return () => {
+        disposed = true;
+        io?.disconnect();
+        v.removeEventListener('playing', clearBlocked);
+        v.removeEventListener('canplay', play);
+        window.removeEventListener('pageshow', play);
+        document.removeEventListener('visibilitychange', onVisibility);
+        document.removeEventListener('pointerdown', play);
+      };
+    }
+
+    if (!('IntersectionObserver' in window)) return;
     const io = new IntersectionObserver(([e]) => (e.isIntersecting ? v.play().catch(() => {}) : v.pause()), { threshold: 0.25 });
     io.observe(v);
     return () => io.disconnect();
-  }, [reduced]);
+  }, [reduced, mobile]);
+
   const base = import.meta.env.BASE_URL;
   return (
     <section id="statement" className="section statement" aria-labelledby="statement-title">
       <div className="statement-media">
-        {mobile ? <img className="statement-poster" src={`${base}media/white-label-poster-640.webp`} srcSet={`${base}media/white-label-poster-640.webp 640w, ${base}media/white-label-poster-1024.webp 1024w`} sizes="100vw" width={1280} height={720} alt="The same kiosk design presented in different brand identities" loading="lazy" decoding="async" /> : <video
+        <video
           ref={ref}
           muted
           loop
           playsInline
           preload="none"
-          poster={`${base}media/white-label-poster.jpg`}
+          poster={mobile ? `${base}media/white-label-poster-1024.webp` : `${base}media/white-label-poster.jpg`}
+          disablePictureInPicture
           aria-hidden="true"
           tabIndex={-1}
+          onClick={() => mobile && ref.current?.play().then(() => setBlocked(false)).catch(() => setBlocked(true))}
         >
-          {!reduced && <source src={`${base}media/white-label.mp4`} type="video/mp4" />}
-        </video>}
+          {!reduced && <source src={`${base}media/${mobile ? 'white-label-mobile.mp4' : 'white-label.mp4'}`} type="video/mp4" />}
+        </video>
+        {mobile && blocked && (
+          <button type="button" className="statement-play" onClick={() => ref.current?.play().then(() => setBlocked(false)).catch(() => setBlocked(true))}>
+            <span aria-hidden="true">▶</span> Play film
+          </button>
+        )}
       </div>
       <div className="wrap statement-copy" data-reveal>
         <div className="panel-in">
@@ -361,7 +413,7 @@ interface DemoProps {
 }
 
 export function Demo({ flow, nonce, engaged, onEngage, onFlow, onRestart, inline, mobile }: DemoProps) {
-  if (mobile) return <MobileDemo flow={flow} nonce={nonce} onFlow={onFlow} onRestart={onRestart} />;
+  if (mobile) return <MobileDemo />;
   const cur = FLOWS.find((f) => f.id === flow)!;
   const hint = (
     <button type="button" className={`demo-hint${engaged ? ' on' : ''}`} onClick={() => onEngage(false)} disabled={!engaged}>
