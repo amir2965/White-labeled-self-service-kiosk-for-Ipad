@@ -1,4 +1,4 @@
-
+<img width="2360" height="1640" alt="localhost_57406_(iPad Air) (8)" src="https://github.com/user-attachments/assets/8e672868-0b28-49e2-870d-c68a6753fc04" />
 
 
 
@@ -59,7 +59,7 @@ https://github.com/user-attachments/assets/32ecbd2e-36c0-4b52-a799-3389cd4e05bc
   </tr>
   <tr>
   <tr>
-    <td align="center"><img src="docs/screenshots/06-kitchen-display.png" width="450" alt="Kitchen display"><br><b>Kitchen display</b></td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/903406c2-ce67-4e6b-865e-937c75aea489" width="450" alt="Kitchen display"><br><b>Kitchen display</b></td>
     <td align="center"><img src="docs/screenshots/07-analytics.png" width="450" alt="Sales analytics"><br><b>Sales analytics</b></td>
   </tr>
   <tr>
